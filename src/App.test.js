@@ -12,9 +12,18 @@ describe('App', () => {
     await screen.findByRole('heading');
     expect(screen.getByRole('heading'))
       .toHaveTextContent('Journal of React');
-      
-  })
 
+    expect(screen.getAllByRole('listitem')).toHaveLength(3);
+  });
+
+  it('switches to People view', async () => {
+    render(<App />);
+
+    userEvent.click(screen.getByText('View All People'));
+
+    expect(screen.getByRole('heading'))
+      .toHaveTextContent('View All People')
+    });
 });
   
   
