@@ -13,10 +13,10 @@ function Login() {
     setError('');
 
     axios.post(`${BACKEND_URL}/login`, { username, password })
-      .then(response => {
-        // implement later
-      })
-      .catch(err => setError("Login failed. Please check your credentials."));
+//       .then(response => {
+//         // implement later
+//       })
+//       .catch(error => setError("Login failed. Please check your credentials."));
   };
 
   return (
