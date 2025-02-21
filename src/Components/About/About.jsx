@@ -31,7 +31,7 @@ function About() {
   const fetchAboutText = () => {
     axios.get(TEXT_READ_ENDPOINT)
       .then(({ data }) => {
-        setAboutText(data.text);
+        setAboutText(data.about.text);
         // setAboutText(getAboutText(data));
       })
       .catch((error) => setError(`There was a problem retrieving the about text. ${error}`));
