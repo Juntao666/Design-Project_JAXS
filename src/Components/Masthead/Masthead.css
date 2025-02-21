@@ -1,0 +1,13 @@
+.masthead-wrapper {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    height: 100vh; 
+    text-align: center; 
+  }
+
+  .masthead-wrapper ul {
+    list-style-position: inside; 
+    padding-left: 0; 
+    text-align: center;
+  }

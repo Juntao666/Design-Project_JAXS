@@ -12,6 +12,7 @@ import Navbar from './Components/Navbar';
 import People from './Components/People';
 import About from './Components/About';
 import Home from './Components/Home';
+import Masthead from './Components/Masthead';
 
 function PersonPage() {
   const { name } = useParams();
@@ -34,6 +35,7 @@ function App() {
         <Route path="people" element={<People />} />
         <Route path="people/:name" element={<PersonPage />} />
         <Route path="about" element={<About />} />
+        <Route path="masthead" element={<Masthead />} />
       </Routes>
     </BrowserRouter>
   );
