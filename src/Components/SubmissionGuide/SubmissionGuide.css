@@ -2,6 +2,8 @@
   border: 5px solid black;
   padding: 20px;
   text-align: center;
+  height: 180vh;
+  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
 }
 
 .about-container ul {

@@ -18,11 +18,6 @@ ErrorMessage.propTypes = {
   message: propTypes.string.isRequired,
 };
 
-// function getAboutText(Data) {
-//   const keys = Object.keys(Data);
-//   const text = Data[keys[0]];
-//   return text;
-// }
 
 function About() {
   const [error, setError] = useState('');
@@ -32,7 +27,6 @@ function About() {
     axios.get(TEXT_READ_ENDPOINT)
       .then(({ data }) => {
         setAboutText(data.about.text);
-        // setAboutText(getAboutText(data));
       })
       .catch((error) => setError(`There was a problem retrieving the about text. ${error}`));
   };

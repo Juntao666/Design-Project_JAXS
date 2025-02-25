@@ -21,13 +21,6 @@ function PersonPage() {
   return <h1>{name}</h1>
 }
 
-//function Home() {
-//  const styles = {
-//    'text-align': 'center',
-//  }
-//  return <h1 style={styles} >Journal of React</h1>
-//}
-
 function App() {
   return (
     <BrowserRouter>
