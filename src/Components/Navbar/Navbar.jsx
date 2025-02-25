@@ -5,12 +5,11 @@ import { Link } from 'react-router-dom';
 const PAGES = [
   { label: 'Home', destination: '/' },
   { label: 'Login', destination: '/login' },
-  { label: 'View All People', destination: '/people' },
-  { label: 'View All Submissions', destination: '/submissions' },
-  { label: 'About', destination: '/about' },
-  { label: 'Submission Guidelines', destination: '/submission_guide' },
+  { label: 'People', destination: '/people' },
+  { label: 'Submissions', destination: '/submissions' },
+  { label: 'Guidelines', destination: '/submission_guide' },
   { label: 'Masthead', destination: '/masthead' },
-
+  { label: 'About', destination: '/about' },
 ];
 
 function NavLink({ page }) {

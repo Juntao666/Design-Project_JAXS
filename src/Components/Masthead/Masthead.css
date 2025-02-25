@@ -4,10 +4,29 @@
     align-items: center; 
     height: 100vh; 
     text-align: center; 
+    padding: 2rem;
+    background: linear-gradient(to bottom, #e8f5e9, #ffffff);
   }
 
-  .masthead-wrapper ul {
-    list-style-position: inside; 
-    padding-left: 0; 
-    text-align: center;
-  }
+  .masthead-wrapper h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    border-bottom: 3px solid #27ae60; /* Green bottom border */
+    padding-bottom: 0.5rem;
+}
+
+.masthead-wrapper h2 {
+  font-size: 1.8rem;
+  margin-top: 1.5rem;
+  color: #2980b9; /* Stylish blue */
+  position: relative;
+}
+
+.masthead-wrapper ul {
+  list-style-position: inside; 
+  padding-left: 0; 
+  text-align: center;
+}
