@@ -6,9 +6,6 @@
   background: linear-gradient(to bottom, #e8f5e9, #ffffff);
 }
 
-.about-container ul {
-  list-style-position: inside;
-  padding-left: 0;
-  display: inline-block;
-  text-align: left;
+.about-container p.formatted-text {
+  white-space: pre-line;
 }
