@@ -10,28 +10,27 @@ function Login() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-        const response = axios.post(`${BACKEND_URL}/login`, { username, password });
-        if (response.status === 200) {
-            setSuccess(true);
-            setLoading(false);
-            // might need to have a token or something in the future to track log in
-        }
-    } catch (error) { // if wrong credential is entered, there's a runtime error 401...
-      setError( 'Login failed. Please check your credentials.');
+      const response = await axios.post(`${BACKEND_URL}/login`, { username, password });
+      if (response.status === 200) {
+        setSuccess(true);
+        setLoading(false);
+        // might need to have a token or something in the future to track log in
+      }
+    } catch (error) {
+      setError('Login failed. Please check your credentials.');
       setLoading(false);
     }
   };
 
-    return (
+  return (
     <div className="login-container">
       {success ? (
-        // This is not showing up...
         <h1>Login Successful</h1>
       ) : (
         !loading && (
@@ -40,22 +39,24 @@ function Login() {
             {error && <p className="error">{error}</p>}
             <form onSubmit={handleLogin}>
               <div className="input-group">
+                <label htmlFor="username">Username:</label>
                 <input
                   type="text"
                   id="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Username"
+                  placeholder="student@nyu.edu"
                   required
                 />
               </div>
               <div className="input-group">
+                <label htmlFor="password">Password:</label>
                 <input
                   type="password"
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
+                  placeholder="••••••••"
                   required
                 />
               </div>
