@@ -1,4 +1,16 @@
 .person-container {
   background: linear-gradient(to bottom, #e8f5e9, #ffffff);
-  border: 5px solid black;
+  border: 3px solid #3498db;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.wrapper h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid #27ae60;
+  padding-bottom: 0.5rem;
 }
