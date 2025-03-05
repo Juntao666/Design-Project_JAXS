@@ -8,6 +8,7 @@ import './People.css';
 
 const PEOPLE_READ_ENDPOINT = `${BACKEND_URL}/people`;
 const PEOPLE_CREATE_ENDPOINT = `${BACKEND_URL}/people/create`;
+const PEOPLE_UPDATE_ENDPOINT = `${BACKEND_URL}/people/update`;
 
 function AddPersonForm({
   visible,
@@ -57,6 +58,64 @@ AddPersonForm.propTypes = {
   setError: propTypes.func.isRequired,
 };
 
+function UpdatePersonForm({
+  person,
+  visible,
+  cancel,
+  fetchPeople,
+  setError,
+}) {
+  const [name, setName] = useState(person.name);
+  const [email, setEmail] = useState(person.email);
+
+  const changeName = (event) => { setName(event.target.value); };
+  const changeEmail = (event) => { setEmail(event.target.value); };
+
+  const updatePerson = (event) => {
+    event.preventDefault();
+    const updatedPerson = {
+      name: name,
+      email: email,
+      roles: person.roles,
+      affiliation: person.affiliation,
+    };
+    axios.post(PEOPLE_UPDATE_ENDPOINT, updatedPerson)
+      .then(() => {
+        fetchPeople();
+        cancel();
+      })
+      .catch((error) => { setError(`There was a problem updating the person. ${error}`); });
+  };
+
+  if (!visible) return null;
+  return (
+    <form>
+      <label htmlFor="name">
+        Name
+      </label>
+      <input required type="text" id="name" value={name} onChange={changeName} />
+      <label htmlFor="email">
+        Email
+      </label>
+      <input required type="text" id="email" value={email} onChange={changeEmail} />
+      <button type="button" onClick={cancel}>Cancel</button>
+      <button type="submit" onClick={updatePerson}>Update</button>
+    </form>
+  );
+}
+UpdatePersonForm.propTypes = {
+  person: propTypes.shape({
+    name: propTypes.string.isRequired,
+    email: propTypes.string.isRequired,
+    roles: propTypes.string.isRequired,
+    affiliation: propTypes.string.isRequired,
+  }).isRequired,
+  visible: propTypes.bool.isRequired,
+  cancel: propTypes.func.isRequired,
+  fetchPeople: propTypes.func.isRequired,
+  setError: propTypes.func.isRequired,
+};
+
 function ErrorMessage({ message }) {
   return (
     <div className="error-message">
@@ -68,11 +127,17 @@ ErrorMessage.propTypes = {
   message: propTypes.string.isRequired,
 };
 
-function Person({ person, fetchPeople}) {
+function Person({ person, fetchPeople, setError}) {
+  const [updatingPerson, setUpdatingPerson] = useState(false);
+
   const deletePerson = () => {
-    axios.delete(`${PEOPLE_READ_ENDPOINT}/${email}`)
+    axios.delete(`${PEOPLE_READ_ENDPOINT}/${person.email}`)
       .then(fetchPeople)
-  }
+      .catch((error) => { setError(`There was a problem deleting the person. ${error}`); });
+  };
+
+  const showUpdatePersonForm = () => { setUpdatingPerson(true); };
+  const hideUpdatePersonForm = () => { setUpdatingPerson(false); };
 
   const { name, email } = person;
   return (
@@ -86,6 +151,14 @@ function Person({ person, fetchPeople}) {
         </div>
       </Link>
       <button onClick={deletePerson}>Delete person</button>
+      <button onClick={showUpdatePersonForm}>Update</button>
+      <UpdatePersonForm
+        person={person}
+        visible={updatingPerson}
+        cancel={hideUpdatePersonForm}
+        fetchPeople={fetchPeople}
+        setError={setError}
+      />
     </div>
   );
 }
@@ -93,8 +166,11 @@ Person.propTypes = {
   person: propTypes.shape({
     name: propTypes.string.isRequired,
     email: propTypes.string.isRequired,
+    roles: propTypes.string.isRequired,
+    affiliation: propTypes.string.isRequired,
   }).isRequired,
-  fetchPeople: propTypes.func,
+  fetchPeople: propTypes.func.isRequired,
+  setError: propTypes.func.isRequired,
 };
 
 function peopleObjectToArray(Data) {
@@ -110,9 +186,7 @@ function People() {
 
   const fetchPeople = () => {
     axios.get(PEOPLE_READ_ENDPOINT)
-      .then(
-        ({ data }) => { setPeople(peopleObjectToArray(data)) }
-    )
+      .then(({ data }) => { setPeople(peopleObjectToArray(data)); })
       .catch((error) => setError(`There was a problem retrieving the list of people. ${error}`));
   };
 
@@ -138,7 +212,14 @@ function People() {
         setError={setError}
       />
       {error && <ErrorMessage message={error} />}
-      {people.map((person) => <Person key={person.email} person={person} fetchPeople={fetchPeople} />)}
+      {people.map((person) => (
+        <Person
+          key={person.email}
+          person={person}
+          fetchPeople={fetchPeople}
+          setError={setError}
+        />
+      ))}
     </div>
   );
 }
