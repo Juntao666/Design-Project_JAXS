@@ -11,15 +11,15 @@ describe('App', () => {
 
     await screen.findByRole('heading');
     expect(screen.getByRole('heading'))
-      .toHaveTextContent('Journal of React');
+      .toHaveTextContent('Journal');
 
-    expect(screen.getAllByRole('listitem')).toHaveLength(3);
+    expect(screen.getAllByRole('listitem')).toHaveLength(7);
   });
 
   it('switches to People view', async () => {
     render(<App />);
 
-    userEvent.click(screen.getByText('View All People'));
+    userEvent.click(screen.getByText('People'));
 
     expect(screen.getByRole('heading'))
       .toHaveTextContent('View All People')
@@ -49,7 +49,7 @@ describe('App', () => {
     userEvent.click(screen.getByText('Guidelines'));
 
     expect(screen.getByRole('heading'))
-      .toHaveTextContent('Submission Guideline')
+      .toHaveTextContent('Submission Guide')
   });
 
   it('switches Masthead page', async () => {
@@ -58,7 +58,7 @@ describe('App', () => {
     userEvent.click(screen.getByText('Masthead'));
 
     expect(screen.getByRole('heading'))
-      .toHaveTextContent('JOURNAL MASTHEAD')
+      .toHaveTextContent('Journal Masthead')
   });
 
   it('switches About page', async () => {
