@@ -9,6 +9,7 @@ import './People.css';
 const PEOPLE_READ_ENDPOINT = `${BACKEND_URL}/people`;
 const PEOPLE_CREATE_ENDPOINT = `${BACKEND_URL}/people/create`;
 const PEOPLE_UPDATE_ENDPOINT = `${BACKEND_URL}/people/update`;
+const ROLES_ENDPOINT = `${BACKEND_URL}/roles`
 
 function AddPersonForm({
   visible,
@@ -18,22 +19,33 @@ function AddPersonForm({
 }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [role, setRoles] = useState('');
+  const [roleOptions, setRoleOptions] = useState({});
 
   const changeName = (event) => { setName(event.target.value); };
   const changeEmail = (event) => { setEmail(event.target.value); };
+  const changeRole = (event) => { setRoles(event.target.value); };
 
   const addPerson = (event) => {
     event.preventDefault();
     const newPerson = {
       name: name,
       email: email,
-      roles: 'ED',
+      roles: role,
       affiliation: '',
     }
     axios.put(PEOPLE_CREATE_ENDPOINT, newPerson)
       .then(fetchPeople)
       .catch((error) => { setError(`There was a problem adding the person. ${error}`); });
   };
+
+  const getRoles = () => {
+    axios.get(ROLES_ENDPOINT)
+      .then(({ data }) => setRoleOptions(data))
+      .catch((error) => { setError(`There was a problem gettingroles. ${error}`); });
+  };
+
+  useEffect(getRoles, []);
 
   if (!visible) return null;
   return (
@@ -46,6 +58,15 @@ function AddPersonForm({
         Email
       </label>
       <input required type="text" id="email" onChange={changeEmail} />
+      <select required name='role' onChange={changeRole}>
+        {
+          Object.keys(roleOptions).map((code) => (
+            <option key={code} value={code}>
+              {roleOptions[code]}
+            </option>
+          ))
+        }
+      </select>
       <button type="button" onClick={cancel}>Cancel</button>
       <button type="submit" onClick={addPerson}>Submit</button>
     </form>
@@ -139,7 +160,7 @@ function Person({ person, fetchPeople, setError}) {
   const showUpdatePersonForm = () => { setUpdatingPerson(true); };
   const hideUpdatePersonForm = () => { setUpdatingPerson(false); };
 
-  const { name, email } = person;
+  const { name, email, roles } = person;
   return (
     <div>
       <Link to={name}>
@@ -147,6 +168,9 @@ function Person({ person, fetchPeople, setError}) {
           <h2>{name}</h2>
           <p>
             Email: {email}
+          </p>
+          <p>
+            Role: {roles}
           </p>
         </div>
       </Link>
