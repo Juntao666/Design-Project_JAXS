@@ -1,16 +1,175 @@
-.person-container {
-  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
-  border: 3px solid #3498db;
-  border-radius: 15px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+  80% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-.wrapper h1 {
+.people-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
+}
+
+.people-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 2rem;
+}
+
+.people-header h1 {
   font-size: 2.5rem;
   color: #2c3e50;
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin-bottom: 1rem;
+  margin: 0;
   border-bottom: 3px solid #27ae60;
   padding-bottom: 0.5rem;
+}
+
+.add-person-button {
+  background: #27ae60;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.add-person-button:hover {
+  background: #219150;
+  transform: scale(1.05);
+}
+
+.person-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.person-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 1rem auto;
+  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
+  border: 3px solid #3498db;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: bounceIn 0.8s ease-out;
+}
+
+.person-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+}
+
+.person-container::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border: 4px double #27ae60;
+  border-radius: 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.person-container:hover::before {
+  opacity: 1;
+}
+
+.person-details {
+  margin-bottom: 1rem;
+}
+
+.person-name {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.person-email,
+.person-role {
+  display: block;
+  margin-top: 0.25rem;
+  color: #34495e;
+  font-size: 1rem;
+  white-space: normal;
+  overflow-wrap: normal;
+}
+
+.person-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.button {
+  background: #3498db;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background 0.3s ease, transform 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.button-delete {
+  background: #e74c3c;
+}
+
+.button-update {
+  background: #27ae60;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+@media (max-width: 768px) {
+  .people-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .people-header h1 {
+    font-size: 2rem;
+  }
+
+  .person-container {
+    max-width: 100%;
+  }
 }
