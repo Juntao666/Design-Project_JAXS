@@ -47,3 +47,13 @@ button[type="submit"]:hover {
   color: red;
   margin-bottom: 10px;
 }
+
+.toggle-form {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.toggle-form:hover {
+  text-decoration: underline;
+}
