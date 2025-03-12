@@ -89,16 +89,14 @@ function UpdatePersonForm({
   setError,
 }) {
   const [name, setName] = useState(person.name);
-  const [email, setEmail] = useState(person.email);
 
   const changeName = (event) => { setName(event.target.value); };
-  const changeEmail = (event) => { setEmail(event.target.value); };
 
   const updatePerson = (event) => {
     event.preventDefault();
     const updatedPerson = {
       name: name,
-      email: email,
+      email: person.email,
       roles: person.roles,
       affiliation: person.affiliation,
     };
@@ -117,10 +115,6 @@ function UpdatePersonForm({
         Name
       </label>
       <input required type="text" id="name" value={name} onChange={changeName} />
-      <label htmlFor="email">
-        Email
-      </label>
-      <input required type="text" id="email" value={email} onChange={changeEmail} />
       <button type="button" onClick={cancel}>Cancel</button>
       <button type="submit" onClick={updatePerson}>Update</button>
     </form>
