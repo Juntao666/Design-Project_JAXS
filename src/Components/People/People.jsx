@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
- 
+
 import { BACKEND_URL } from '../../constants';
 import './People.css';
 
@@ -16,15 +16,16 @@ function AddPersonForm({
   cancel,
   fetchPeople,
   setError,
+  roleOptions,
 }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRoles] = useState('');
-  const [roleOptions, setRoleOptions] = useState({});
+  const [role, setRole] = useState('');
+//   const [roleOptions, setRoleOptions] = useState({});
 
   const changeName = (event) => { setName(event.target.value); };
   const changeEmail = (event) => { setEmail(event.target.value); };
-  const changeRole = (event) => { setRoles(event.target.value); };
+  const changeRole = (event) => { setRole(event.target.value); };
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -39,13 +40,13 @@ function AddPersonForm({
       .catch((error) => { setError(`There was a problem adding the person. ${error}`); });
   };
 
-  const getRoles = () => {
-    axios.get(ROLES_ENDPOINT)
-      .then(({ data }) => setRoleOptions(data))
-      .catch((error) => { setError(`There was a problem gettingroles. ${error}`); });
-  };
-
-  useEffect(getRoles, []);
+//   const getRoles = () => {
+//     axios.get(ROLES_ENDPOINT)
+//       .then(({ data }) => setRoleOptions(data))
+//       .catch((error) => { setError(`There was a problem getting roles. ${error}`); });
+//   };
+//
+//   useEffect(getRoles, []);
 
   if (!visible) return null;
   return (
@@ -57,7 +58,7 @@ function AddPersonForm({
       <label htmlFor="email">
         Email
       </label>
-      <input required type="text" id="email" onChange={changeEmail} />
+      <input required type="text" id="email" value={email} onChange={changeEmail} />
       <select required name='role' onChange={changeRole}>
         {
           Object.keys(roleOptions).map((code) => (
@@ -76,6 +77,7 @@ AddPersonForm.propTypes = {
   visible: propTypes.bool.isRequired,
   cancel: propTypes.func.isRequired,
   fetchPeople: propTypes.func.isRequired,
+  roleOptions: propTypes.object.isRequired,
   setError: propTypes.func.isRequired,
 };
 
@@ -148,7 +150,7 @@ ErrorMessage.propTypes = {
   message: propTypes.string.isRequired,
 };
 
-function Person({ person, fetchPeople, setError}) {
+function Person({ person, fetchPeople, setError, roleMap, }) {
   const [updatingPerson, setUpdatingPerson] = useState(false);
 
   const deletePerson = () => {
@@ -170,7 +172,7 @@ function Person({ person, fetchPeople, setError}) {
             Email: {email}
           </p>
           <p>
-            Role: {roles}
+            Role: {roles.map((role) => (<p key={role}>{ roleMap[role] }</p>))}
           </p>
         </div>
       </Link>
@@ -190,11 +192,12 @@ Person.propTypes = {
   person: propTypes.shape({
     name: propTypes.string.isRequired,
     email: propTypes.string.isRequired,
-    roles: propTypes.string.isRequired,
     affiliation: propTypes.string.isRequired,
+    roles: propTypes.arrayOf(propTypes.string).isRequired,
   }).isRequired,
   fetchPeople: propTypes.func.isRequired,
   setError: propTypes.func.isRequired,
+  roleMap: propTypes.object.isRequired,
 };
 
 function peopleObjectToArray(Data) {
@@ -207,6 +210,7 @@ function People() {
   const [error, setError] = useState('');
   const [people, setPeople] = useState([]);
   const [addingPerson, setAddingPerson] = useState(false);
+  const [roleMap, setRoleMap] = useState({});
 
   const fetchPeople = () => {
     axios.get(PEOPLE_READ_ENDPOINT)
@@ -214,10 +218,17 @@ function People() {
       .catch((error) => setError(`There was a problem retrieving the list of people. ${error}`));
   };
 
+  const getRoles = () => {
+    axios.get(ROLES_ENDPOINT)
+      .then(({ data }) => setRoleMap(data))
+      .catch((error) => { setError(`There was a problem getting roles. ${error}`); });
+  }
+
   const showAddPersonForm = () => { setAddingPerson(true); };
   const hideAddPersonForm = () => { setAddingPerson(false); };
 
   useEffect(fetchPeople, []);
+  useEffect(getRoles, []);
 
   return (
     <div className="wrapper">
@@ -234,6 +245,7 @@ function People() {
         cancel={hideAddPersonForm}
         fetchPeople={fetchPeople}
         setError={setError}
+        roleOptions={roleMap}
       />
       {error && <ErrorMessage message={error} />}
       {people.map((person) => (
@@ -242,6 +254,7 @@ function People() {
           person={person}
           fetchPeople={fetchPeople}
           setError={setError}
+          roleMap={roleMap}
         />
       ))}
     </div>
