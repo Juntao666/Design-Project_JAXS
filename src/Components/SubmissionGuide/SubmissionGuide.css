@@ -1,22 +1,22 @@
-.about-container {
+.submission-guide-container {
   border: 5px solid black;
   padding: 20px;
   text-align: center;
   height: 180vh;
-  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
+  background: linear-gradient(to bottom, #bababa, #ffffff);
 }
 
-.about-container p.formatted-text {
+.submission-guide-container p.formatted-text {
   white-space: pre-line;
   list-style-position: inside; 
 }
 
-.about-container h1 {
+.submission-guide-container h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: #000000;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 1rem;
-  border-bottom: 3px solid #27ae60;
+  border-bottom: 3px solid #000000;
   padding-bottom: 0.5rem;
 }

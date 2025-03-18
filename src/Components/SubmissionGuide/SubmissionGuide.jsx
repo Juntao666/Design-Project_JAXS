@@ -29,7 +29,7 @@ function SubmissionGuide() {
   }, []);
 
   return (
-    <div className="about-container">
+    <div className="submission-guide-container">
       <h1>Submission Guide</h1>
       {error && <ErrorMessage message={error} />}
       <p className="formatted-text">
