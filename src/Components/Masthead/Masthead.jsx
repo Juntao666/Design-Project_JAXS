@@ -22,8 +22,7 @@ function Masthead() {
       {!masthead ? (
         <p>Loading...</p>
       ) : (
-        <div>
-          {/* Editors */}
+        <div>  
           <h2>Editors</h2>
           {Array.isArray(masthead.Editor) && masthead.Editor.length > 0 ? (
             <ul>
@@ -36,25 +35,27 @@ function Masthead() {
           ) : (
             <p>No editors available.</p>
           )}
-
-          {/* Managing Editors */}
+          
           <h2>Managing Editors</h2>
           {Array.isArray(masthead["Managing Editor"]) && masthead["Managing Editor"].length > 0 ? (
             <ul>
               {masthead["Managing Editor"].map((editor, index) => (
-                <li key={index}>{editor}</li>
+                <li key={index}>
+                  <strong>{editor.name}</strong>
+                </li>
               ))}
             </ul>
           ) : (
             <p>No managing editors.</p>
           )}
-
-          {/* Consulting Editors */}
+          
           <h2>Consulting Editors</h2>
           {Array.isArray(masthead["Consulting Editor"]) && masthead["Consulting Editor"].length > 0 ? (
             <ul>
               {masthead["Consulting Editor"].map((editor, index) => (
-                <li key={index}>{editor}</li>
+                <li key={index}>
+                  <strong>{editor.name}</strong>
+                </li>
               ))}
             </ul>
           ) : (
