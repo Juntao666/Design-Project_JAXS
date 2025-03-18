@@ -13,7 +13,7 @@ html {
   --off-white: hsla(45, 29%, 97%, 1);
 
   --background-color: var(--off-white);
-  --accent-color: var(--cambridge-blue);
+  --accent-color: black;
   background-color: var(--background-color);
 }
 

@@ -5,9 +5,13 @@
   height: 100vh;
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
+  background: linear-gradient(to bottom, #bababa, #ffffff);
 }
 
 .about-container p {
   white-space: pre-line;
+}
+
+.about-container h1 {
+  border-bottom: 3px solid #000000;
 }

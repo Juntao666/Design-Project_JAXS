@@ -23,8 +23,8 @@
   height: 100vh;
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
-  border: 3px solid #3498db;
+  background: linear-gradient(to bottom, #bababa, #ffffff);
+  border: 3px solid #000000;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   animation: fallIn 1.2s ease-out;
@@ -32,11 +32,11 @@
 
 .home-container h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: #000000;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 1rem;
-  border-bottom: 3px solid #27ae60;
+  border-bottom: 3px solid #000000;
   padding-bottom: 0.5rem;
 }
 
