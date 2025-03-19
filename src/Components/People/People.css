@@ -1,17 +1,11 @@
-@keyframes bounceIn {
+@keyframes fadeIn {
   0% {
     opacity: 0;
-    transform: translateY(-50px);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(10px);
-  }
-  80% {
-    transform: translateY(-5px);
+    transform: scale(0.95);
   }
   100% {
-    transform: translateY(0);
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -81,7 +75,7 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   padding: 1rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: bounceIn 0.8s ease-out;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .person-container:hover {
