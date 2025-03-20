@@ -38,7 +38,6 @@ function About() {
       <h1>About Us</h1>
       {error && <ErrorMessage message={error} />}
       <p>{aboutText || "Loading..."}</p>
-      <p>Check out our <a href="/submissions">Submission Guidelines</a> to learn how to contribute.</p>
     </div>
   );
 }
