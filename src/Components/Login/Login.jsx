@@ -53,7 +53,7 @@ function Login() {
   };
 
   const switchToLogin = () => {
-    setSuccess(false);
+    setSuccess(true);
     setIsRegistering(false);
     setUsername('');
     setPassword('');
