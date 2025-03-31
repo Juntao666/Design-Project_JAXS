@@ -52,10 +52,26 @@ function Login() {
     }
   };
 
+  const switchToLogin = () => {
+    setSuccess(false);
+    setIsRegistering(false);
+    setUsername('');
+    setPassword('');
+    setConfirmPassword('');
+    setError('');
+  };
+
   return (
     <div className="login-container">
       {success ? (
-        <h1>{isRegistering ? 'Registration Successful' : 'Login Successful'}</h1>
+        <>
+          <h1>{isRegistering ? 'Registration Successful' : 'Login Successful'}</h1>
+          {isRegistering && (
+            <button className="switch-button" onClick={switchToLogin}>
+              Go to Login
+            </button>
+          )}
+        </>
       ) : (
         !loading && (
           <>

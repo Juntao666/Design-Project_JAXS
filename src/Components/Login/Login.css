@@ -14,16 +14,15 @@
 
 .input-group {
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
   margin-bottom: 15px;
 }
 
 .input-group label {
-  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 .input-group input {
-  flex: 1;
   padding: 8px;
   box-sizing: border-box;
 }
@@ -56,4 +55,18 @@ button[type="submit"]:hover {
 
 .toggle-form:hover {
   text-decoration: underline;
+}
+
+.switch-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.switch-button:hover {
+  background-color: #0056b3;
 }

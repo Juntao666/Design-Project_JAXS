@@ -21,6 +21,7 @@ function AddPersonForm({
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('');
+  const [success, setSuccess] = useState(false);
 //   const [roleOptions, setRoleOptions] = useState({});
 
   const changeName = (event) => { setName(event.target.value); };
@@ -36,7 +37,14 @@ function AddPersonForm({
       affiliation: '',
     }
     axios.put(PEOPLE_CREATE_ENDPOINT, newPerson)
-      .then(fetchPeople)
+      .then(() => {
+        fetchPeople();
+        setSuccess(true);
+        setName('');
+        setEmail('');
+        setRole('');
+        setTimeout(() => setSuccess(false), 3000);
+      })
       .catch((error) => { setError(`There was a problem adding the person. ${error}`); });
   };
 
@@ -51,6 +59,7 @@ function AddPersonForm({
   if (!visible) return null;
   return (
     <form>
+      {success && <div className="success-message">Person added successfully!</div>}
       <label htmlFor="name">
         Name
       </label>
