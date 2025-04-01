@@ -9,6 +9,7 @@ import {
 import './App.css';
 
 import Navbar from './Components/Navbar';
+import Footer from './Footer/Footer';
 import People from './Components/People';
 import About from './Components/About';
 import Home from './Components/Home';
@@ -36,6 +37,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="dashboard" element={<Dashboard />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
