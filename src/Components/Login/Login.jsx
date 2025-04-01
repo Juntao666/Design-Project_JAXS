@@ -47,7 +47,13 @@ function Login() {
         setLoading(false);
       }
     } catch (error) {
-      setError('Registration failed.');
+      if (error.response && error.response.status === 400) {
+        setError('Registration failed: Password does not meet requirements.');
+      } else if (error.response && error.response.status === 409) {
+        setError('Registration failed: Username already exists.');
+      } else {
+        setError('Registration failed. Please try again.');
+      }
       setLoading(false);
     }
   };
@@ -77,6 +83,18 @@ function Login() {
           <>
             <h1>{isRegistering ? 'Register' : 'Login'}</h1>
             {error && <p className="error">{error}</p>}
+            {isRegistering && (
+              <div className="password-requirements">
+                <h4>Password Requirements:</h4>
+                <ul>
+                  <li>At least 8 characters long</li>
+                  <li>At least one uppercase letter</li>
+                  <li>At least one lowercase letter</li>
+                  <li>At least one digit</li>
+                  <li>At least one special character (!@#$%^&*(),.?:{}|&lt;&gt;)</li>
+                </ul>
+              </div>
+            )}
             <form onSubmit={isRegistering ? handleRegister : handleLogin}>
               <div className="input-group">
                 <label htmlFor="username">Username:</label>
