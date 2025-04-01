@@ -35,7 +35,7 @@ function SubmitManuscriptForm({ visible, cancel, setError }) {
       abstract,
     };
 
-    axios.put(ADD_MANUSCRIPT_ENDPOINT, manuscript)
+    axios.post(ADD_MANUSCRIPT_ENDPOINT, manuscript)
       .then(() => {
         setSuccess(true);
         setTitle('');
