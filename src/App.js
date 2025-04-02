@@ -9,7 +9,7 @@ import {
 import './App.css';
 
 import Navbar from './Components/Navbar';
-import Footer from './Footer/Footer';
+import Footer from './Components/Footer';
 import People from './Components/People';
 import About from './Components/About';
 import Home from './Components/Home';
