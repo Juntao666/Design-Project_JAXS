@@ -5,7 +5,7 @@
     height: 100vh; 
     text-align: center; 
     padding: 2rem;
-    background: linear-gradient(to bottom, #bababa, #ffffff);
+    background: linear-gradient(to top, #bababa, #ffffff);
   }
 
   .masthead-wrapper h1 {

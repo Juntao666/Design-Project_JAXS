@@ -175,7 +175,7 @@ function Person({ person, fetchPeople, setError, roleMap, }) {
             Email: {email}
           </p>
           <p>
-            Role: {roles.map((role) => (<p key={role}>{ roleMap[role] }</p>))}
+            Role: {roles.length > 0 ? roles.map((role) => roleMap[role]).join(', ') : 'none'}
           </p>
         </div>
       </Link>

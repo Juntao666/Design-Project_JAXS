@@ -2,7 +2,7 @@
   padding: 20px;
   text-align: center;
   height: 200vh;
-  background: linear-gradient(to bottom, #bababa, #ffffff);
+  background: linear-gradient(to top, #bababa, #ffffff);
 }
 
 .submission-guide-container p.formatted-text {
