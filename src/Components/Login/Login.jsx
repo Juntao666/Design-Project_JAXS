@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import propTypes from 'prop-types';
 import axios from 'axios';
 import { BACKEND_URL } from '../../constants';
 import './Login.css';
 
-function Login() {
+function Login({ onLogin, onLogout  }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,8 +22,10 @@ function Login() {
     try {
       const response = await axios.post(`${BACKEND_URL}/login`, { username, password });
       if (response.status === 200) {
-        setSuccess(true);
+        localStorage.setItem('username', username);
         setLoading(false);
+        onLogin();
+        navigate('/dashboard');
       }
     } catch (error) {
       setError('Login failed. Please check your credentials.');
@@ -43,8 +47,11 @@ function Login() {
     try {
       const response = await axios.post(`${BACKEND_URL}/login/create`, { username, password });
       if (response.status === 201) {
-        setSuccess(true);
+        localStorage.setItem('username', username);
+        setIsRegistering(false);
         setLoading(false);
+        onLogin();
+        navigate('/dashboard');
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -58,27 +65,24 @@ function Login() {
     }
   };
 
-  const switchToLogin = () => {
-    setSuccess(false);
-    setIsRegistering(false);
+  const handleLogout = () => {
+    localStorage.removeItem('username');
     setUsername('');
     setPassword('');
     setConfirmPassword('');
     setError('');
+    onLogout();
+    navigate('/');
   };
 
   return (
     <>
       <div className="login-container">
-        {success ? (
-          <>
-            <h1>{isRegistering ? 'Registration Successful' : 'Login Successful'}</h1>
-            {isRegistering && (
-              <button className="switch-button" onClick={switchToLogin}>
-                Go to Login
-              </button>
-            )}
-          </>
+        {localStorage.getItem('username') ? (
+        <>
+          <h1>Welcome, {localStorage.getItem('username')}!</h1>
+          <button onClick={handleLogout}>Logout</button>
+        </>
         ) : (
           !loading && (
             <>
@@ -141,7 +145,6 @@ function Login() {
                   onClick={() => {
                     setIsRegistering(!isRegistering);
                     setError('');
-                    setSuccess(false);
                   }}
                 >
                   {isRegistering ? 'Login' : 'Register'}
@@ -155,5 +158,10 @@ function Login() {
     </>
   );
 }
+
+Login.propTypes = {
+  onLogin: propTypes.func.isRequired,
+  onLogout: propTypes.func.isRequired,
+};
 
 export default Login;

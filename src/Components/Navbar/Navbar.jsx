@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 const PAGES = [
   { label: 'Home', destination: '/' },
   { label: 'Login', destination: '/login' },
-  { label: 'People', destination: '/people' },
-  { label: 'Dashboard', destination: '/dashboard' },
+  { label: 'People', destination: '/people', requiresLogin: true},
+  { label: 'Dashboard', destination: '/dashboard', requiresLogin: true},
   { label: 'Submissions', destination: '/submission_guide' },
   { label: 'Masthead', destination: '/masthead' },
   { label: 'About', destination: '/about' },
@@ -27,14 +27,23 @@ NavLink.propTypes = {
   }).isRequired,
 };
 
-function Navbar() {
+function Navbar({ isLoggedIn }) {
+  const visiblePages = PAGES.filter(
+    (page) => !page.requiresLogin || isLoggedIn
+  );
   return (
     <nav>
       <ul className="wrapper">
-        {PAGES.map((page) => <NavLink key={page.destination} page={page} />)}
+        {visiblePages.map((page) => (
+          <NavLink key={page.destination} page={page} />
+        ))}
       </ul>
     </nav>
   );
 }
+
+Navbar.propTypes = {
+  isLoggedIn: propTypes.bool.isRequired,
+};
 
 export default Navbar;
