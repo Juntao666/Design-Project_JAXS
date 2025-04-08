@@ -68,88 +68,91 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      {success ? (
-        <>
-          <h1>{isRegistering ? 'Registration Successful' : 'Login Successful'}</h1>
-          {isRegistering && (
-            <button className="switch-button" onClick={switchToLogin}>
-              Go to Login
-            </button>
-          )}
-        </>
-      ) : (
-        !loading && (
+    <>
+      <div className="login-container">
+        {success ? (
           <>
-            <h1>{isRegistering ? 'Register' : 'Login'}</h1>
-            {error && <p className="error">{error}</p>}
+            <h1>{isRegistering ? 'Registration Successful' : 'Login Successful'}</h1>
             {isRegistering && (
-              <div className="password-requirements">
-                <h4>Password Requirements:</h4>
-                <ul>
-                  <li>At least 8 characters long</li>
-                  <li>At least one uppercase letter</li>
-                  <li>At least one lowercase letter</li>
-                  <li>At least one digit</li>
-                  <li>At least one special character (!@#$%^&*(),.?:{}|&lt;&gt;)</li>
-                </ul>
-              </div>
+              <button className="switch-button" onClick={switchToLogin}>
+                Go to Login
+              </button>
             )}
-            <form onSubmit={isRegistering ? handleRegister : handleLogin}>
-              <div className="input-group">
-                <label htmlFor="username">Username:</label>
-                <input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="student@nyu.edu"
-                  required
-                />
-              </div>
-              <div className="input-group">
-                <label htmlFor="password">Password:</label>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
+          </>
+        ) : (
+          !loading && (
+            <>
+              <h1>{isRegistering ? 'Register' : 'Login'}</h1>
+              {error && <p className="error">{error}</p>}
               {isRegistering && (
+                <div className="password-requirements">
+                  <h4>Password Requirements:</h4>
+                  <ul>
+                    <li>At least 8 characters long</li>
+                    <li>At least one uppercase letter</li>
+                    <li>At least one lowercase letter</li>
+                    <li>At least one digit</li>
+                    <li>At least one special character (!@#$%^&*(),.?:{}|&lt;&gt;)</li>
+                  </ul>
+                </div>
+              )}
+              <form onSubmit={isRegistering ? handleRegister : handleLogin}>
                 <div className="input-group">
-                  <label htmlFor="confirm-password">Confirm Password:</label>
+                  <label htmlFor="username">Username:</label>
+                  <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="student@nyu.edu"
+                    required
+                  />
+                </div>
+                <div className="input-group">
+                  <label htmlFor="password">Password:</label>
                   <input
                     type="password"
-                    id="confirm-password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     required
                   />
                 </div>
-              )}
-              <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
-            </form>
-            <p>
-              {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
-              <span
-                className="toggle-form"
-                onClick={() => {
-                  setIsRegistering(!isRegistering);
-                  setError('');
-                  setSuccess(false);
-                }}
-              >
-                {isRegistering ? 'Login' : 'Register'}
-              </span>
-            </p>
-          </>
-        )
-      )}
-    </div>
+                {isRegistering && (
+                  <div className="input-group">
+                    <label htmlFor="confirm-password">Confirm Password:</label>
+                    <input
+                      type="password"
+                      id="confirm-password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                )}
+                <button type="submit">{isRegistering ? 'Register' : 'Login'}</button>
+              </form>
+              <p>
+                {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
+                <span
+                  className="toggle-form"
+                  onClick={() => {
+                    setIsRegistering(!isRegistering);
+                    setError('');
+                    setSuccess(false);
+                  }}
+                >
+                  {isRegistering ? 'Login' : 'Register'}
+                </span>
+              </p>
+            </>
+          )
+        )}
+      </div>
+      <div className="white-space"></div>
+    </>
   );
 }
 

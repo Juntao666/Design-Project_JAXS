@@ -2,6 +2,7 @@
   border: 2px solid #333;
   padding: 20px;
   margin: 50px auto;
+  margin-top: 100px;
   max-width: 400px;
   background-color: #fff;
   text-align: left;
@@ -69,4 +70,8 @@ button[type="submit"]:hover {
 
 .switch-button:hover {
   background-color: #0056b3;
+}
+
+.white-space {
+  height: 100px;
 }

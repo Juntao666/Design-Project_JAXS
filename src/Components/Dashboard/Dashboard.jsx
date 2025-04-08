@@ -51,7 +51,7 @@ function Manuscripts() {
   useEffect(fetchManuscripts, []);
 
   return (
-    <div className="wrapper">
+    <div className="dashboard-wrapper">
       <header>
         <h1>View All Manuscripts</h1>
       </header>

@@ -234,33 +234,36 @@ function People() {
   useEffect(getRoles, []);
 
   return (
-    <div className="wrapper">
-      <header>
-        <h1>
-          View All People
-        </h1>
-        <button type="button" onClick={showAddPersonForm}>
-          Add a Person
-        </button>
-      </header>
-      <AddPersonForm
-        visible={addingPerson}
-        cancel={hideAddPersonForm}
-        fetchPeople={fetchPeople}
-        setError={setError}
-        roleOptions={roleMap}
-      />
-      {error && <ErrorMessage message={error} />}
-      {people.map((person) => (
-        <Person
-          key={person.email}
-          person={person}
+    <>
+      <div className="wrapper">
+        <header>
+          <h1>
+            View All People
+          </h1>
+          <button type="button" onClick={showAddPersonForm}>
+            Add a Person
+          </button>
+        </header>
+        <AddPersonForm
+          visible={addingPerson}
+          cancel={hideAddPersonForm}
           fetchPeople={fetchPeople}
           setError={setError}
-          roleMap={roleMap}
+          roleOptions={roleMap}
         />
-      ))}
-    </div>
+        {error && <ErrorMessage message={error} />}
+        {people.map((person) => (
+          <Person
+            key={person.email}
+            person={person}
+            fetchPeople={fetchPeople}
+            setError={setError}
+            roleMap={roleMap}
+          />
+        ))}
+      </div>
+      <div className="white-space"></div>
+    </>
   );
 }
 
