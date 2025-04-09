@@ -35,9 +35,18 @@ function Home() {
   return (
     <div className="home-container">
       <div className="title-wrapper">
-        <h1 className="title sway-text">JAXS</h1>
+        <h1 className="title sway-text">{title || "JAXS"}</h1>
         <div className="rotating-cubes">
-          {[0, 1, 2].map((i) => <div key={i} className="cube"></div>)}
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="cube">
+              <div className="face front"></div>
+              <div className="face back"></div>
+              <div className="face right"></div>
+              <div className="face left"></div>
+              <div className="face top"></div>
+              <div className="face bottom"></div>
+            </div>
+          ))}
         </div>
       </div>
       {error && <ErrorMessage message={error} />}
