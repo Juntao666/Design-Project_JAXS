@@ -5,8 +5,9 @@ import axios from 'axios';
 import { BACKEND_URL } from '../../constants';
 import './Login.css';
 
-function Login({ onLogin, onLogout  }) {
+function Login({ onLogin, onLogout }) {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState(''); // new email state
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -44,8 +45,14 @@ function Login({ onLogin, onLogout  }) {
       return;
     }
 
+    if (!email) {
+      setError("Email is required for registration.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await axios.post(`${BACKEND_URL}/login/create`, { username, password });
+      const response = await axios.post(`${BACKEND_URL}/login/create`, { username, email, password });
       if (response.status === 201) {
         localStorage.setItem('username', username);
         setIsRegistering(false);
@@ -68,6 +75,7 @@ function Login({ onLogin, onLogout  }) {
   const handleLogout = () => {
     localStorage.removeItem('username');
     setUsername('');
+    setEmail('');
     setPassword('');
     setConfirmPassword('');
     setError('');
@@ -79,10 +87,10 @@ function Login({ onLogin, onLogout  }) {
     <>
       <div className="login-container">
         {localStorage.getItem('username') ? (
-        <>
-          <h1>Welcome, {localStorage.getItem('username')}!</h1>
-          <button onClick={handleLogout}>Logout</button>
-        </>
+          <>
+            <h1>Welcome, {localStorage.getItem('username')}!</h1>
+            <button onClick={handleLogout}>Logout</button>
+          </>
         ) : (
           !loading && (
             <>
@@ -108,10 +116,23 @@ function Login({ onLogin, onLogout  }) {
                     id="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="student@nyu.edu"
+                    placeholder="studentID"
                     required
                   />
                 </div>
+                {isRegistering && (
+                  <div className="input-group">
+                    <label htmlFor="email">Email:</label>
+                    <input
+                      type="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="student@nyu.edu"
+                      required
+                    />
+                  </div>
+                )}
                 <div className="input-group">
                   <label htmlFor="password">Password:</label>
                   <input
