@@ -19,20 +19,29 @@ function SubmitManuscriptForm({ visible, cancel, setError }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [authorEmail, setAuthorEmail] = useState('');
-  const [state, setState] = useState('');
   const [text, setText] = useState('');
   const [abstract, setAbstract] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const today = new Date();
+    const dateStr = today.toISOString().split('T')[0];
+
+    const key = `${author}_${title}_${dateStr}`;
+
     const manuscript = {
+      key,
       title,
       author,
       author_email: authorEmail,
-      state,
+      state: 'SUB',
       text,
       abstract,
+      editors: [],
+      referees: [],
+      history: [],
     };
 
     axios.post(ADD_MANUSCRIPT_ENDPOINT, manuscript)
@@ -41,7 +50,6 @@ function SubmitManuscriptForm({ visible, cancel, setError }) {
         setTitle('');
         setAuthor('');
         setAuthorEmail('');
-        setState('');
         setText('');
         setAbstract('');
         setTimeout(() => setSuccess(false), 3000);
@@ -56,27 +64,34 @@ function SubmitManuscriptForm({ visible, cancel, setError }) {
   return (
     <form className="manuscript-form">
       {success && <div className="success-message">Manuscript submitted successfully!</div>}
-      <label htmlFor="title">Title</label>
-      <input required type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <div className="form-group">
+        <label htmlFor="title">Title</label>
+        <input required type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      </div>
 
-      <label htmlFor="author">Author</label>
-      <input required type="text" id="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
+      <div className="form-group">
+        <label htmlFor="author">Author</label>
+        <input required type="text" id="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
+      </div>
 
-      <label htmlFor="authorEmail">Author Email</label>
-      <input required type="email" id="authorEmail" value={authorEmail} onChange={(e) => setAuthorEmail(e.target.value)} />
+      <div className="form-group">
+        <label htmlFor="authorEmail">Author Email</label>
+        <input required type="email" id="authorEmail" value={authorEmail} onChange={(e) => setAuthorEmail(e.target.value)} />
+      </div>
 
-      <label htmlFor="state">State</label>
-      <input required type="text" id="state" value={state} onChange={(e) => setState(e.target.value)} />
+      <div className="form-group">
+        <label htmlFor="abstract">Abstract</label>
+        <textarea required id="abstract" value={abstract} onChange={(e) => setAbstract(e.target.value)} />
+      </div>
 
-      <label htmlFor="abstract">Abstract</label>
-      <textarea required id="abstract" value={abstract} onChange={(e) => setAbstract(e.target.value)} />
+      <div className="form-group">
+        <label htmlFor="text">Full Text</label>
+        <textarea required id="text" value={text} onChange={(e) => setText(e.target.value)} />
+      </div>
 
-      <label htmlFor="text">Full Text</label>
-      <textarea required id="text" value={text} onChange={(e) => setText(e.target.value)} />
-
-      <div>
-        <button type="submit" onClick={handleSubmit}>Submit</button>
-        <button type="button" onClick={cancel}>Cancel</button>
+      <div className="form-buttons">
+        <button type="submit" className="form-button" onClick={handleSubmit}>Submit</button>
+        <button type="button" className="form-button" onClick={cancel}>Cancel</button>
       </div>
     </form>
   );

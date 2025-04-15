@@ -7,7 +7,7 @@
 
 .submission-guide-container p.formatted-text {
   white-space: pre-line;
-  list-style-position: inside; 
+  list-style-position: inside;
 }
 
 .submission-guide-container h1 {
@@ -18,6 +18,71 @@
   margin-bottom: 1rem;
   border-bottom: 3px solid #000000;
   padding-bottom: 0.5rem;
+}
+
+.manuscript-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.manuscript-form label {
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  align-self: flex-start;
+}
+
+.manuscript-form input,
+.manuscript-form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid #000;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.manuscript-form textarea {
+  resize: vertical;
+}
+
+.form-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.form-buttons button {
+  all: unset;
+  box-sizing: border-box;
+  background-color: #222;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: inline-block;
+  min-width: 150px;
+  height: 48px;
+}
+.form-buttons button:hover {
+  background-color: #444;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 500px;
 }
 
 
