@@ -1,8 +1,9 @@
 .dashboard-wrapper {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     justify-content: center;
+    margin-left: 20px;
     margin-top: 20px;
     margin-bottom: 30px;
 }

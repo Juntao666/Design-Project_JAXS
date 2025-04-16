@@ -7,7 +7,6 @@ import './SubmissionGuide.css';
 
 const TEXT_READ_ENDPOINT = `${BACKEND_URL}/texts`;
 const ADD_MANUSCRIPT_ENDPOINT = `${BACKEND_URL}/manus`;
-const VALID_ACTIONS_ENDPOINT = `${BACKEND_URL}/manu/valid_actions`;
 
 
 function ErrorMessage({ message }) {
@@ -109,8 +108,6 @@ function SubmissionGuide() {
   const [error, setError] = useState('');
   const [subGuideText, setSubGuideText] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [currentState, setCurrentState] = useState('SUB');
-  const [validActions, setValidActions] = useState([]);
 
   useEffect(() => {
     axios.get(TEXT_READ_ENDPOINT)
@@ -124,17 +121,6 @@ function SubmissionGuide() {
 
   const openForm = () => setShowForm(true);
   const closeForm = () => setShowForm(false);
-
-  const fetchValidActions = () => {
-    axios.get(`${VALID_ACTIONS_ENDPOINT}/${currentState}`)
-      .then(({ data }) => {
-        setValidActions(data.valid_actions);
-        setError('');
-      })
-      .catch((error) => {
-        setError(`Failed to fetch valid actions: ${error}`);
-      });
-  }; 
 
   return (
     <div className="submission-guide-container">
@@ -152,30 +138,6 @@ function SubmissionGuide() {
         cancel={closeForm}
         setError={setError}
       />
-
-      <div className="form-group" style={{ marginTop: '20px' }}>
-        <label htmlFor="state">Manuscript State</label>
-        <input
-          type="text"
-          id="state"
-          value={currentState}
-          onChange={(e) => setCurrentState(e.target.value)}
-        />
-        <button type="button" onClick={fetchValidActions}>
-          Show Valid Actions
-        </button>
-
-        {validActions.length > 0 && (
-        <div className="valid-actions-box">
-            <h3>Valid Actions for State {currentState}</h3>
-            <ul>
-              {validActions.map((action, index) => (
-                <li key={index}>{action}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
 
     </div>
   );
