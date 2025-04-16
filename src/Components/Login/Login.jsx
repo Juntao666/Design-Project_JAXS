@@ -24,7 +24,13 @@ function Login({ onLogin, onLogout }) {
       const response = await axios.post(`${BACKEND_URL}/login`, { username, password });
       if (response.status === 200) {
         localStorage.setItem('username', username);
-        const userRoles = response.data.roles || [];
+        const userRoles = []; // Need to parse roles from login
+        /* For testing */
+        // if (!userRoles.includes('ED')) {
+        //   userRoles.push('ED');
+        // }
+        console.log('Login.jsx: User roles:', userRoles);
+        console.log('Login.jsx: Has editor role:', userRoles.includes('ED'));
         localStorage.setItem('userRoles', JSON.stringify(userRoles));
         setLoading(false);
         onLogin(userRoles);
@@ -57,7 +63,7 @@ function Login({ onLogin, onLogout }) {
       const response = await axios.post(`${BACKEND_URL}/login/create`, { username, email, password });
       if (response.status === 201) {
         localStorage.setItem('username', username);
-        const userRoles = response.data.roles || [];
+        const userRoles = []; // Need to parse roles from create
         localStorage.setItem('userRoles', JSON.stringify(userRoles));
         setIsRegistering(false);
         setLoading(false);

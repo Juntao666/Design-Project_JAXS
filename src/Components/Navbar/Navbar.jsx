@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const PAGES = [
   { label: 'Home', destination: '/' },
   { label: 'Login', destination: '/login' },
-  { label: 'People', destination: '/people', requiresLogin: true},
+  { label: 'People', destination: '/people', requiresLogin: true, requiresEditorRole: true},
   { label: 'Dashboard', destination: '/dashboard', requiresLogin: true},
   { label: 'Submissions', destination: '/submission_guide' },
   { label: 'Masthead', destination: '/masthead' },
@@ -47,10 +47,6 @@ function Navbar({ isLoggedIn, hasEditorRole }) {
 Navbar.propTypes = {
   isLoggedIn: propTypes.bool.isRequired,
   hasEditorRole: propTypes.bool,
-};
-
-Navbar.defaultProps = {
-  hasEditorRole: false,
 };
 
 export default Navbar;
