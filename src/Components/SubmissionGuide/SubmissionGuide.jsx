@@ -164,8 +164,17 @@ function SubmissionGuide() {
         <button type="button" onClick={fetchValidActions}>
           Show Valid Actions
         </button>
-        <pre>{JSON.stringify(validActions, null, 2)}</pre>
 
+        {validActions.length > 0 && (
+        <div className="valid-actions-box">
+            <h3>Valid Actions for State {currentState}</h3>
+            <ul>
+              {validActions.map((action, index) => (
+                <li key={index}>{action}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
     </div>
