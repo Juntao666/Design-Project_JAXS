@@ -26,7 +26,7 @@ function PersonPage() {
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('username'));
-  const [userRoles, setUserRoles] = useState(JSON.parse(localStorage.getItem('userRoles')));
+  const [userRoles, setUserRoles] = useState(JSON.parse(localStorage.getItem('userRoles') || '[]'));
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -45,9 +45,10 @@ function App() {
 
   const hasEditorRole = userRoles.includes('ED');
   console.log('App.js: Has editor role:', userRoles.includes('ED'));
+
   return (
     <BrowserRouter>
-      <Navbar isLoggedIn={isLoggedIn} hasEditorRole={hasEditorRole} key={isLoggedIn ? 'logged-in' : 'logged-out'}/>
+      <Navbar isLoggedIn={isLoggedIn} hasEditorRole={hasEditorRole} />
       <Routes>
         <Route path="" element={<Home />} />
         <Route

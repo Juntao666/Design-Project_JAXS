@@ -5,6 +5,11 @@ import axios from 'axios';
 import { BACKEND_URL } from '../../constants';
 import './Login.css';
 
+const PEOPLE_ENDPOINT = `${BACKEND_URL}/people`;
+const CREATE_PEOPLE_ENDPOINT = `${BACKEND_URL}/people/create`;
+const LOGIN_ENDPOINT = `${BACKEND_URL}/login`;
+const LOGIN_CREATE_ENDPOINT = `${BACKEND_URL}/login/create`;
+
 function Login({ onLogin, onLogout }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState(''); // new email state
@@ -15,22 +20,40 @@ function Login({ onLogin, onLogout }) {
   const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
 
+const fetchUserRolesByEmail = async (email) => {
+  try {
+    const encodedEmail = encodeURIComponent(email);
+    const response = await axios.get(`${PEOPLE_ENDPOINT}/${encodedEmail}`);
+    const rawRoles = response.data.roles;
+
+    if (Array.isArray(rawRoles)) {
+      return rawRoles.map(r => r.trim());
+    } else if (typeof rawRoles === 'string') {
+      return rawRoles.split(',').map(r => r.trim()).filter(Boolean);
+    } else {
+      return [];
+    }
+  } catch (err) {
+    console.error('Failed to fetch user roles:', err);
+    return [];
+  }
+};
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const response = await axios.post(`${BACKEND_URL}/login`, { username, password });
+      const response = await axios.post(LOGIN_ENDPOINT, { username, password });
       if (response.status === 200) {
+        const userEmail = response.data.email;
+
         localStorage.setItem('username', username);
-        const userRoles = []; // Need to parse roles from login
-        /* For testing */
-        // if (!userRoles.includes('ED')) {
-        //   userRoles.push('ED');
-        // }
-        console.log('Login.jsx: User roles:', userRoles);
-        console.log('Login.jsx: Has editor role:', userRoles.includes('ED'));
+        localStorage.setItem('email', userEmail);
+
+        const userRoles = await fetchUserRolesByEmail(userEmail);
+
         localStorage.setItem('userRoles', JSON.stringify(userRoles));
         setLoading(false);
         onLogin(userRoles);
@@ -60,11 +83,21 @@ function Login({ onLogin, onLogout }) {
     }
 
     try {
-      const response = await axios.post(`${BACKEND_URL}/login/create`, { username, email, password });
+      const response = await axios.post(LOGIN_CREATE_ENDPOINT, { username, email, password });
       if (response.status === 201) {
+        await axios.put(CREATE_PEOPLE_ENDPOINT, {
+          name: username,
+          email,
+          affiliation: '',
+          roles: 'AU',
+        });
+
+        const userRoles = await fetchUserRolesByEmail(email);
+
         localStorage.setItem('username', username);
-        const userRoles = []; // Need to parse roles from create
+        localStorage.setItem('email', email);
         localStorage.setItem('userRoles', JSON.stringify(userRoles));
+
         setIsRegistering(false);
         setLoading(false);
         onLogin(userRoles);
@@ -84,6 +117,7 @@ function Login({ onLogin, onLogout }) {
 
   const handleLogout = () => {
     localStorage.removeItem('username');
+    localStorage.removeItem('email');
     localStorage.removeItem('userRoles');
     setUsername('');
     setEmail('');
