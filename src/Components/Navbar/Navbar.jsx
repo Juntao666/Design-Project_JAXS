@@ -27,7 +27,7 @@ NavLink.propTypes = {
   }).isRequired,
 };
 
-function Navbar({ isLoggedIn }) {
+function Navbar({ isLoggedIn, hasEditorRole }) {
   const visiblePages = PAGES.filter(
     (page) => 
       (!page.requiresLogin || isLoggedIn) && 
