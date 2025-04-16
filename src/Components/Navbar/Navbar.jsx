@@ -29,7 +29,9 @@ NavLink.propTypes = {
 
 function Navbar({ isLoggedIn }) {
   const visiblePages = PAGES.filter(
-    (page) => !page.requiresLogin || isLoggedIn
+    (page) => 
+      (!page.requiresLogin || isLoggedIn) && 
+      (!page.requiresEditorRole || hasEditorRole)
   );
   return (
     <nav>
@@ -44,6 +46,11 @@ function Navbar({ isLoggedIn }) {
 
 Navbar.propTypes = {
   isLoggedIn: propTypes.bool.isRequired,
+  hasEditorRole: propTypes.bool,
+};
+
+Navbar.defaultProps = {
+  hasEditorRole: false,
 };
 
 export default Navbar;

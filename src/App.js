@@ -26,10 +26,12 @@ function PersonPage() {
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('username'));
+  const [userRoles, setUserRoles] = useState(localStorage.getItem('userRoles') ? JSON.parse(localStorage.getItem('userRoles')) : []);
 
   useEffect(() => {
     const checkLoginStatus = () => {
       setIsLoggedIn(!!localStorage.getItem('username'));
+      setUserRoles(localStorage.getItem('userRoles') ? JSON.parse(localStorage.getItem('userRoles')) : []);
     };
 
   checkLoginStatus();
@@ -41,16 +43,18 @@ function App() {
     };
   }, []);
 
+  const hasEditorRole = userRoles.includes('ED');
+
   return (
     <BrowserRouter>
-      <Navbar isLoggedIn={isLoggedIn} key={isLoggedIn ? 'logged-in' : 'logged-out'}/>
+      <Navbar isLoggedIn={isLoggedIn} hasEditorRole={hasEditorRole} key={isLoggedIn ? 'logged-in' : 'logged-out'}/>
       <Routes>
         <Route path="" element={<Home />} />
         <Route
-          path="people" element={isLoggedIn ? <People /> : <Navigate to="/login" />}
+          path="people" element={isLoggedIn && hasEditorRole ? <People /> : <Navigate to="/login" />}
         />
         <Route
-          path="people/:name" element={isLoggedIn ? <PersonPage /> : <Navigate to="/login" />}
+          path="people/:name" element={isLoggedIn && hasEditorRole ? <PersonPage /> : <Navigate to="/login" />}
         />
         <Route path="about" element={<About />} />
         <Route path="masthead" element={<Masthead />} />
@@ -59,8 +63,14 @@ function App() {
           path="login"
           element={
             <Login
-              onLogin={() => setIsLoggedIn(true)}
-              onLogout={() => setIsLoggedIn(false)}
+              onLogin={(roles) => {
+                setIsLoggedIn(true);
+                setUserRoles(roles);
+              }}
+              onLogout={() => {
+                setIsLoggedIn(false);
+                setUserRoles([]);
+              }}
             />
           }
         />

@@ -24,8 +24,10 @@ function Login({ onLogin, onLogout }) {
       const response = await axios.post(`${BACKEND_URL}/login`, { username, password });
       if (response.status === 200) {
         localStorage.setItem('username', username);
+        const userRoles = response.data.roles || [];
+        localStorage.setItem('userRoles', JSON.stringify(userRoles));
         setLoading(false);
-        onLogin();
+        onLogin(userRoles);
         navigate('/dashboard');
       }
     } catch (error) {
@@ -55,9 +57,11 @@ function Login({ onLogin, onLogout }) {
       const response = await axios.post(`${BACKEND_URL}/login/create`, { username, email, password });
       if (response.status === 201) {
         localStorage.setItem('username', username);
+        const userRoles = response.data.roles || [];
+        localStorage.setItem('userRoles', JSON.stringify(userRoles));
         setIsRegistering(false);
         setLoading(false);
-        onLogin();
+        onLogin(userRoles);
         navigate('/dashboard');
       }
     } catch (error) {
@@ -74,6 +78,7 @@ function Login({ onLogin, onLogout }) {
 
   const handleLogout = () => {
     localStorage.removeItem('username');
+    localStorage.removeItem('userRoles');
     setUsername('');
     setEmail('');
     setPassword('');
