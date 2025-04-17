@@ -29,19 +29,21 @@ function App() {
   const [userRoles, setUserRoles] = useState(JSON.parse(localStorage.getItem('userRoles') || '[]'));
 
   useEffect(() => {
-    const checkLoginStatus = () => {
-      setIsLoggedIn(!!localStorage.getItem('username'));
-      setUserRoles(JSON.parse(localStorage.getItem('userRoles')));
-    };
+  const checkLoginStatus = () => {
+    setIsLoggedIn(!!localStorage.getItem('username'));
+
+    const rolesStr = localStorage.getItem('userRoles');
+    const parsedRoles = rolesStr ? JSON.parse(rolesStr) : [];
+    setUserRoles(parsedRoles);
+  };
 
   checkLoginStatus();
-
   window.addEventListener('storage', checkLoginStatus);
 
-    return () => {
-      window.removeEventListener('storage', checkLoginStatus);
-    };
-  }, []);
+  return () => {
+    window.removeEventListener('storage', checkLoginStatus);
+  };
+}, []);
 
   const hasEditorRole = userRoles.includes('ED');
   console.log('App.js: Has editor role:', userRoles.includes('ED'));
