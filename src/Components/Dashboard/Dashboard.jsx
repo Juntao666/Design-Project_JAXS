@@ -21,6 +21,7 @@ function Manuscript({ manuscript, refresh, setError}) {
   const [validActions, setValidActions] = useState([]);
   const [referee, setReferee] = useState('');
   const [targetState, setTargetState] = useState('');
+  const [showText, setShowText] = useState(false);
 
   useEffect(() => {
     axios.get(`${VALID_ACTIONS_ENDPOINT}/${manuscript.state}`)
@@ -56,6 +57,16 @@ function Manuscript({ manuscript, refresh, setError}) {
         <h2>{manuscript.title}</h2>
         <p>Author: {manuscript.author}</p>
         <p>State: {manuscript.state}</p>
+
+        <div className="manuscript-text">
+          <button onClick={() => setShowText(!showText)}>
+            {showText ? 'Hide Text' : 'Show Text'}
+          </button>
+          {showText && 
+            <p>{manuscript.text}</p>
+          }   
+        </div>
+
         <input
         type="text"
         placeholder="Referee"
@@ -87,6 +98,7 @@ Manuscript.propTypes = {
     title: propTypes.string.isRequired,
     author: propTypes.string.isRequired,
     state: propTypes.string.isRequired,
+    text: propTypes.string.isRequired,
   }).isRequired,
   refresh: propTypes.func.isRequired,
   setError: propTypes.func.isRequired,
