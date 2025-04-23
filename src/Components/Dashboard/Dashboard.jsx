@@ -21,6 +21,7 @@ function Manuscript({ manuscript, refresh, setError}) {
   const [validActions, setValidActions] = useState([]);
   const [referee, setReferee] = useState('');
   const [targetState, setTargetState] = useState('');
+  const [showAbstract, setShowAbstract] = useState(false);
   const [showText, setShowText] = useState(false);
 
   useEffect(() => {
@@ -67,6 +68,15 @@ function Manuscript({ manuscript, refresh, setError}) {
           }   
         </div>
 
+        <div className="manuscript-abstract">
+          <button onClick={() => setShowAbstract(!showAbstract)}>
+            {showAbstract ? 'Hide Abstract' : 'Show Abstract'}
+          </button>
+          {showAbstract && 
+            <p>{manuscript.abstract}</p>
+          }   
+        </div>
+
         <input
         type="text"
         placeholder="Referee"
@@ -98,6 +108,7 @@ Manuscript.propTypes = {
     title: propTypes.string.isRequired,
     author: propTypes.string.isRequired,
     state: propTypes.string.isRequired,
+    abstract: propTypes.string.isRequired,
     text: propTypes.string.isRequired,
   }).isRequired,
   refresh: propTypes.func.isRequired,
@@ -116,7 +127,11 @@ function Manuscripts() {
 
   const fetchManuscripts = () => {
     axios.get(MANUSCRIPTS_ENDPOINT)
-      .then(({ data }) => setManuscripts(manuscriptObjectToArray(data)))
+      .then(({ data }) => {
+        const arr = manuscriptObjectToArray(data);
+        arr.sort((a, b) => a.state.localeCompare(b.state));
+        setManuscripts(arr);
+      })
       .catch((error) => setError(`There was a problem retrieving manuscripts. ${error}`));
   };
 
