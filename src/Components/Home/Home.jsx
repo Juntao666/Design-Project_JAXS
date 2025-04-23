@@ -7,6 +7,17 @@ import './Home.css';
 
 const TITLE_READ_ENDPOINT = `${BACKEND_URL}/project_name`;
 
+const Cube = () => (
+  <div className="cube">
+    <div className="face front" />
+    <div className="face back" />
+    <div className="face right" />
+    <div className="face left" />
+    <div className="face top" />
+    <div className="face bottom" />
+  </div>
+);
+
 function ErrorMessage({ message }) {
   return (
     <div className="error-message">
@@ -34,20 +45,19 @@ function Home() {
 
   return (
     <div className="home-container">
+      <div className="corner-cubes top-left">
+        {[0, 1, 2].map((i) => (
+          <Cube key={`tl-${i}`} />
+        ))}
+      </div>
+
+      <div className="corner-cubes bottom-right">
+        {[0, 1, 2].map((i) => (
+          <Cube key={`br-${i}`} />
+        ))}
+      </div>
       <div className="title-wrapper">
         <h1 className="title sway-text">{title || "JAXS"}</h1>
-        <div className="rotating-cubes">
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="cube">
-              <div className="face front"></div>
-              <div className="face back"></div>
-              <div className="face right"></div>
-              <div className="face left"></div>
-              <div className="face top"></div>
-              <div className="face bottom"></div>
-            </div>
-          ))}
-        </div>
       </div>
       {error && <ErrorMessage message={error} />}
     </div>
