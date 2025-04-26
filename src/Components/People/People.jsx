@@ -157,9 +157,17 @@ function Person({ person, fetchPeople, setError, roleMap, }) {
   const [updatingPerson, setUpdatingPerson] = useState(false);
 
   const deletePerson = () => {
-    axios.delete(`${PEOPLE_READ_ENDPOINT}/${person.email}`)
+    const userId = localStorage.getItem('username');
+    const encodedEmail = encodeURIComponent(person.email);
+
+    axios
+      .delete(
+        `${PEOPLE_READ_ENDPOINT}/${encodedEmail}/${userId}`
+      )
       .then(fetchPeople)
-      .catch((error) => { setError(`There was a problem deleting the person. ${error}`); });
+      .catch((error) => {
+        setError(`There was a problem deleting the person. ${error}`);
+      });
   };
 
   const showUpdatePersonForm = () => { setUpdatingPerson(true); };

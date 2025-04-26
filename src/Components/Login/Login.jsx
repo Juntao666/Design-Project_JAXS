@@ -23,7 +23,7 @@ function Login({ onLogin, onLogout }) {
 const fetchUserRolesByEmail = async (email) => {
   try {
     const encodedEmail = encodeURIComponent(email);
-    const response = await axios.get(`${PEOPLE_ENDPOINT}/${encodedEmail}`);
+    const response = await axios.get(`${PEOPLE_ENDPOINT}/${encodedEmail}/${username}`);
     const rawRoles = response.data.roles;
 
     if (Array.isArray(rawRoles)) {
