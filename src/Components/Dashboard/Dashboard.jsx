@@ -124,15 +124,40 @@ function manuscriptObjectToArray(data) {
 function Manuscripts() {
   const [error, setError] = useState('');
   const [manuscripts, setManuscripts] = useState([]);
+  const [sortOrder, setSortOrder] = useState('subFirst');
 
   const fetchManuscripts = () => {
     axios.get(MANUSCRIPTS_ENDPOINT)
       .then(({ data }) => {
         const arr = manuscriptObjectToArray(data);
-        arr.sort((a, b) => a.state.localeCompare(b.state));
+        //arr.sort((a, b) => a.state.localeCompare(b.state));
+        sortManuscripts(arr, sortOrder);
         setManuscripts(arr);
       })
       .catch((error) => setError(`There was a problem retrieving manuscripts. ${error}`));
+  };
+
+  const sortManuscripts = (manuscripts, order) => {
+    if (order === 'subFirst') {
+      // Put SUB states first, then sort alphabetically
+      manuscripts.sort((a, b) => {
+        if (a.state === 'SUB' && b.state !== 'SUB') return -1;
+        if (a.state !== 'SUB' && b.state === 'SUB') return 1;
+        return a.state.localeCompare(b.state);
+      });
+    } else if (order === 'alphabetical') {
+      manuscripts.sort((a, b) => a.state.localeCompare(b.state));
+    }
+  };
+
+  const toggleSortOrder = () => {
+    const newOrder = sortOrder === 'subFirst' ? 'alphabetical' : 'subFirst';
+    setSortOrder(newOrder);
+    
+    // Re sort the current manuscripts
+    const manuscriptsCopy = [...manuscripts];
+    sortManuscripts(manuscriptsCopy, newOrder);
+    setManuscripts(manuscriptsCopy);
   };
 
   useEffect(fetchManuscripts, []);
@@ -141,6 +166,9 @@ function Manuscripts() {
     <div className="dashboard-wrapper">
       <header>
         <h1>View All Manuscripts</h1>
+        <button onClick={toggleSortOrder}>
+          {sortOrder === 'subFirst' ? 'Sort Alphabetically' : 'Show Submissions First'}
+        </button>
       </header>
 
       {error && <ErrorMessage message={error} />}
