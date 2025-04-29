@@ -2,6 +2,8 @@
 
 [Node.js](https://nodejs.org/en/download) is required for this.
 
+`npm install react-bootstrap bootstrap`
+
 # Getting started
 
 `cd demo-frontend`  
