@@ -28,7 +28,14 @@ NavLink.propTypes = {
 };
 
 function Navbar({ isLoggedIn, hasEditorRole }) {
-  const visiblePages = PAGES.filter(
+  const adjustedPages = PAGES.map((page) => {
+    if (page.label === 'Login' && isLoggedIn) {
+      return { ...page, label: 'Profile' };
+    }
+    return page;
+  });
+
+  const visiblePages = adjustedPages.filter(
     (page) => 
       (!page.requiresLogin || isLoggedIn) && 
       (!page.requiresEditorRole || hasEditorRole)

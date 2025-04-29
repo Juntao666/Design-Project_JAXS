@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { useNavigate } from 'react-router-dom';
 import propTypes from 'prop-types';
 import axios from 'axios';
@@ -57,7 +57,6 @@ const fetchUserRolesByEmail = async (email) => {
         localStorage.setItem('userRoles', JSON.stringify(userRoles));
         setLoading(false);
         onLogin(userRoles);
-        navigate('/dashboard');
       }
     } catch (error) {
       setError('Login failed. Please check your credentials.');
@@ -101,7 +100,6 @@ const fetchUserRolesByEmail = async (email) => {
         setIsRegistering(false);
         setLoading(false);
         onLogin(userRoles);
-        navigate('/dashboard');
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -128,14 +126,106 @@ const fetchUserRolesByEmail = async (email) => {
     navigate('/');
   };
 
+  function ProfileSection() {
+    const [name, setName] = useState('');
+    const [affiliation, setAffiliation] = useState('');
+    const [roles, setRoles] = useState([]);
+    const [editing, setEditing] = useState(false);
+    const [successMsg, setSuccessMsg] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
+
+    const email = localStorage.getItem('email');
+    const username = localStorage.getItem('username');
+
+    useEffect(() => {
+      const fetchProfile = async () => {
+        try {
+          const encodedEmail = encodeURIComponent(email);
+          const response = await axios.get(`${PEOPLE_ENDPOINT}/${encodedEmail}/${username}`);
+          setName(response.data.name);
+          setAffiliation(response.data.affiliation || '');
+          setRoles(response.data.roles || []);
+        } catch (err) {
+          console.error('Failed to fetch profile:', err);
+          setErrorMsg('Failed to load profile.');
+        }
+      };
+      fetchProfile();
+    }, [email, username]);
+
+    const handleUpdate = async () => {
+      try {
+        await axios.post(`${PEOPLE_ENDPOINT}/update`, {
+          name,
+          email,
+          affiliation,
+          roles,
+        });
+        setEditing(false);
+        setSuccessMsg('Profile updated successfully.');
+        setTimeout(() => setSuccessMsg(''), 3000);
+      } catch (err) {
+        console.error('Update failed:', err);
+        setErrorMsg('Update failed.');
+      }
+    };
+
+    return (
+    <div className="profile-section">
+      <h1>Profile Page</h1>
+      {errorMsg && <p className="error">{errorMsg}</p>}
+      {successMsg && <p className="success">{successMsg}</p>}
+
+      <div className="input-group">
+        <label>Username:</label>
+        <input type="text" value={username} readOnly />
+      </div>
+
+      <div className="input-group">
+        <label>Email:</label>
+        <input type="text" value={email} readOnly />
+      </div>
+
+      <div className="input-group">
+        <label>Name:</label>
+        <input
+          type="text"
+          value={name}
+          readOnly={!editing}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+
+      <div className="input-group">
+        <label>Affiliation:</label>
+        <input
+          type="text"
+          value={affiliation}
+          readOnly={!editing}
+          onChange={(e) => setAffiliation(e.target.value)}
+        />
+      </div>
+
+      <div className="input-group">
+        <label>Roles:</label>
+        <input type="text" value={roles.join(', ')} readOnly />
+      </div>
+
+      {editing ? (
+        <button onClick={handleUpdate}>Save</button>
+      ) : (
+        <button onClick={() => setEditing(true)}>Edit Profile</button>
+      )}
+      <button onClick={handleLogout}>Logout</button>
+    </div>
+  );
+}
+
   return (
     <>
       <div className="login-container">
         {localStorage.getItem('username') ? (
-          <>
-            <h1>Welcome, {localStorage.getItem('username')}!</h1>
-            <button onClick={handleLogout}>Logout</button>
-          </>
+         <ProfileSection />
         ) : (
           !loading && (
             <>
