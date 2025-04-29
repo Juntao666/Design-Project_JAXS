@@ -5,6 +5,8 @@ import axios from 'axios';
 import { BACKEND_URL } from '../../constants';
 import './Dashboard.css';
 import { actionMapping } from './ActionMapping';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 const MANUSCRIPTS_ENDPOINT = `${BACKEND_URL}/manus`;
 const VALID_ACTIONS_ENDPOINT = `${BACKEND_URL}/manu/valid_actions`;
@@ -130,6 +132,7 @@ function Manuscripts() {
   const [error, setError] = useState('');
   const [manuscripts, setManuscripts] = useState([]);
   const [sortOrder, setSortOrder] = useState('subFirst');
+  const [currentState, setCurrentState] = useState('');
 
   const fetchManuscripts = () => {
     axios.get(MANUSCRIPTS_ENDPOINT)
@@ -165,26 +168,49 @@ function Manuscripts() {
     setManuscripts(manuscriptsCopy);
   };
 
+  const DropDownButton = () => {
+    return (
+      <DropdownButton id="dropdown-button" title="Dropdown button">
+        <Dropdown.Item onClick={() => setCurrentState('SUB')}>Submitted</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('REJ')}>Rejected</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('WIT')}>Author has withdrawn</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('AUR')}>Awaiting author review</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('ARN')}>Author rivising</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('CED')}>The copy editing</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('ERV')}>Awaiting editor review</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('FOR')}>Undergoing formatting</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('PUB')}>Published</Dropdown.Item>
+        <Dropdown.Item onClick={() => setCurrentState('REV')}>Referee reviewing</Dropdown.Item>
+      </DropdownButton>
+    );
+  }
+
   useEffect(fetchManuscripts, []);
 
   return (
     <div className="dashboard-wrapper">
       <header>
         <h1>View All Manuscripts</h1>
-        <button onClick={toggleSortOrder}>
-          {sortOrder === 'subFirst' ? 'Sort Alphabetically' : 'Show Submissions First'}
-        </button>
+        <div className="buttons">
+          <button onClick={toggleSortOrder}>
+            {sortOrder === 'subFirst' ? 'Sort Alphabetically' : 'Show Submissions First'}
+          </button>
+          <DropDownButton />
+        </div>
       </header>
 
       {error && <ErrorMessage message={error} />}
-      {manuscripts.map((manuscript) => (
-        <Manuscript
-          key={manuscript.key}
-          manuscript={manuscript}
-          refresh={fetchManuscripts}
-          setError={setError}
-        />
-      ))}
+      {manuscripts
+        .filter(manuscript => currentState == '' || manuscript.state == currentState)
+        .map((manuscript) => (
+          <Manuscript
+            key={manuscript.key}
+            manuscript={manuscript}
+            refresh={fetchManuscripts}
+            setError={setError}
+          />
+        ))
+      }
     </div>
   );
 }

@@ -7,3 +7,15 @@
     margin-top: 20px;
     margin-bottom: 30px;
 }
+
+.buttons {
+    display: flex;
+    padding-left: 50px;
+    padding-bottom: 100px;
+}
+  
+#dropdown-button + .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
