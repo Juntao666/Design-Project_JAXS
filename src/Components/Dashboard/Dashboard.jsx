@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import { BACKEND_URL } from '../../constants';
 import './Dashboard.css';
+import { actionMapping } from './ActionMapping';
 
 const MANUSCRIPTS_ENDPOINT = `${BACKEND_URL}/manus`;
 const VALID_ACTIONS_ENDPOINT = `${BACKEND_URL}/manu/valid_actions`;
@@ -52,12 +53,16 @@ function Manuscript({ manuscript, refresh, setError}) {
       });
   };
 
+  const getActionName = (action) => {
+    return actionMapping[action] || action;
+  }
+
   return (
     <div>
       <div className="manuscript-container">
         <h2>{manuscript.title}</h2>
         <p>Author: {manuscript.author}</p>
-        <p>State: {manuscript.state}</p>
+        <p>State: {getActionName(manuscript.state)}</p>
 
         <div className="manuscript-text">
           <button onClick={() => setShowText(!showText)}>
@@ -93,7 +98,7 @@ function Manuscript({ manuscript, refresh, setError}) {
         <div className="actions">
           {validActions.map((action) => (
             <button key={action} onClick={() => performAction(action)}>
-              {action}
+              {getActionName(action)}
             </button>
           ))}
         </div>
