@@ -66,6 +66,13 @@ function Manuscript({ manuscript, refresh, setError}) {
         <p>Author: {manuscript.author}</p>
         <p>State: {getActionName(manuscript.state)}</p>
 
+        <div className="manuscript-referees">
+          <strong>Referees:</strong>{' '}
+          {Array.isArray(manuscript.referees) && manuscript.referees.length > 0
+            ? manuscript.referees.join(', ')
+            : 'No referee'}
+        </div>
+
         <div className="manuscript-text">
           <button onClick={() => setShowText(!showText)}>
             {showText ? 'Hide Text' : 'Show Text'}
@@ -117,6 +124,7 @@ Manuscript.propTypes = {
     state: propTypes.string.isRequired,
     abstract: propTypes.string.isRequired,
     text: propTypes.string.isRequired,
+    referees: propTypes.arrayOf(propTypes.string),
   }).isRequired,
   refresh: propTypes.func.isRequired,
   setError: propTypes.func.isRequired,
@@ -134,11 +142,19 @@ function Manuscripts() {
   const [sortOrder, setSortOrder] = useState('subFirst');
   const [currentState, setCurrentState] = useState('');
 
+  const userEmail = localStorage.getItem('email');
+  const userRoles = JSON.parse(localStorage.getItem('userRoles') || '[]');
+  const isEditor = userRoles.includes('ED');
+
   const fetchManuscripts = () => {
     axios.get(MANUSCRIPTS_ENDPOINT)
       .then(({ data }) => {
-        const arr = manuscriptObjectToArray(data);
-        //arr.sort((a, b) => a.state.localeCompare(b.state));
+        let arr = manuscriptObjectToArray(data);
+
+        if (!isEditor && userEmail) {
+          arr = arr.filter(m => m.author_email === userEmail);
+        }
+
         sortManuscripts(arr, sortOrder);
         setManuscripts(arr);
       })

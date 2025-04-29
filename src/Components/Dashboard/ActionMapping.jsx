@@ -13,6 +13,5 @@ export const actionMapping = {
     'ARF': 'assign referee',
     'DRF': 'delete referee',
     'AWR': 'accept with revision',
-    'RRF': 'remove referee',
     "EDM": 'editor move'
 }
