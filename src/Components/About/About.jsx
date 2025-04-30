@@ -71,8 +71,9 @@ function About() {
           <textarea
             value={editText}
             onChange={e => setEditText(e.target.value)}
-            rows={10}
-            cols={60}
+            rows={20}
+            cols={100}
+            style={{ width: '100%', maxWidth: '800px', minHeight: '400px' }}
           />
           <div className="button-row">
             <button onClick={handleSave}>Save</button>
