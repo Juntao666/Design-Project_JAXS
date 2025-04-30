@@ -98,12 +98,67 @@
     border-bottom: none;
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 .manuscript-container {
     border: 2px solid #333;
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 4px;
     background-color: #f9f9f9;
+    animation-name: fadeIn;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+}
+
+.dashboard-wrapper > div:nth-child(2) .manuscript-container {
+    animation-delay: 100ms;
+}
+
+.dashboard-wrapper > div:nth-child(3) .manuscript-container {
+    animation-delay: 180ms;
+}
+
+.dashboard-wrapper > div:nth-child(4) .manuscript-container {
+    animation-delay: 260ms;
+}
+
+.dashboard-wrapper > div:nth-child(5) .manuscript-container {
+    animation-delay: 340ms;
+}
+
+.dashboard-wrapper > div:nth-child(6) .manuscript-container {
+    animation-delay: 420ms;
+}
+
+.dashboard-wrapper > div:nth-child(7) .manuscript-container {
+    animation-delay: 500ms;
+}
+
+.dashboard-wrapper > div:nth-child(8) .manuscript-container {
+    animation-delay: 580ms;
+}
+
+.dashboard-wrapper > div:nth-child(9) .manuscript-container {
+    animation-delay: 660ms;
+}
+
+.dashboard-wrapper > div:nth-child(10) .manuscript-container {
+    animation-delay: 740ms;
+}
+
+.dashboard-wrapper > div:nth-child(n+11) .manuscript-container {
+    animation-delay: 820ms;
 }
 
 .manuscript-referees,

@@ -1,169 +1,70 @@
 @keyframes fadeIn {
   0% {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateY(10px) scale(0.98);
   }
   100% {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 
-.people-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  padding: 2rem;
-  background: linear-gradient(to bottom, #e8f5e9, #ffffff);
+.wrapper > div {
+  animation-name: fadeIn;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
 }
 
-.people-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  margin-bottom: 2rem;
+.wrapper > div:nth-child(1) {
+  animation-delay: 100ms;
 }
 
-.people-header h1 {
-  font-size: 2.5rem;
-  color: #2c3e50;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin: 0;
-  border-bottom: 3px solid #ffffff;
-  padding-bottom: 0.5rem;
+.wrapper > div:nth-child(2) {
+  animation-delay: 180ms;
 }
 
-.add-person-button {
-  background: #27ae60;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: bold;
-  transition: background 0.3s ease, transform 0.3s ease;
+.wrapper > div:nth-child(3) {
+  animation-delay: 260ms;
 }
 
-.add-person-button:hover {
-  background: #219150;
-  transform: scale(1.05);
+.wrapper > div:nth-child(4) {
+  animation-delay: 340ms;
 }
 
-.person-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+.wrapper > div:nth-child(5) {
+  animation-delay: 420ms;
+}
+
+.wrapper > div:nth-child(6) {
+  animation-delay: 500ms;
+}
+
+.wrapper > div:nth-child(7) {
+  animation-delay: 580ms;
+}
+
+.wrapper > div:nth-child(8) {
+  animation-delay: 660ms;
+}
+
+.wrapper > div:nth-child(9) {
+  animation-delay: 740ms;
+}
+
+.wrapper > div:nth-child(10) {
+  animation-delay: 820ms;
+}
+
+.wrapper > div:nth-child(n+11) {
+  animation-delay: 900ms;
 }
 
 .person-container {
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  margin: 1rem auto;
-  background: linear-gradient(to bottom, #bababa, #ffffff);
-  border: 1px solid #000000;
-  border-radius: 15px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  padding: 2rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: fadeIn 0.8s ease-out;
 }
 
 .person-container:hover {
   transform: scale(1.02);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
-}
-
-.person-container::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: -8px;
-  right: -8px;
-  bottom: -8px;
-  border: 4px double #27ae60;
-  border-radius: 15px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.person-container:hover::before {
-  opacity: 1;
-}
-
-.person-details {
-  margin-bottom: 1rem;
-}
-
-.person-name {
-  font-size: 1.3rem;
-  color: #2c3e50;
-  font-weight: bold;
-}
-
-.person-email,
-.person-role {
-  display: block;
-  margin-top: 0.25rem;
-  color: #34495e;
-  font-size: 1rem;
-  white-space: normal;
-  overflow-wrap: normal;
-}
-
-.person-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-}
-
-.button {
-  background: #3498db;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: background 0.3s ease, transform 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.button-delete {
-  background: #e74c3c;
-}
-
-.button-update {
-  background: #27ae60;
-}
-
-.button:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
-}
-
-@media (max-width: 768px) {
-  .people-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .people-header h1 {
-    font-size: 2rem;
-  }
-
-  .person-container { 
-    max-width: 100%;
-  }
 }
