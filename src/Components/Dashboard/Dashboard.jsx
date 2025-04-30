@@ -5,8 +5,6 @@ import axios from 'axios';
 import { BACKEND_URL } from '../../constants';
 import './Dashboard.css';
 import { actionMapping } from './ActionMapping';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 
 const MANUSCRIPTS_ENDPOINT = `${BACKEND_URL}/manus`;
 const VALID_ACTIONS_ENDPOINT = `${BACKEND_URL}/manu/valid_actions`;
@@ -141,6 +139,7 @@ function Manuscripts() {
   const [manuscripts, setManuscripts] = useState([]);
   const [sortOrder, setSortOrder] = useState('subFirst');
   const [currentState, setCurrentState] = useState('');
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
 
   const userEmail = localStorage.getItem('email');
   const userRoles = JSON.parse(localStorage.getItem('userRoles') || '[]');
@@ -174,44 +173,60 @@ function Manuscripts() {
     }
   };
 
-  const toggleSortOrder = () => {
-    const newOrder = sortOrder === 'subFirst' ? 'alphabetical' : 'subFirst';
-    setSortOrder(newOrder);
-    
-    // Re sort the current manuscripts
-    const manuscriptsCopy = [...manuscripts];
-    sortManuscripts(manuscriptsCopy, newOrder);
-    setManuscripts(manuscriptsCopy);
+  const toggleSortDropdown = () => {
+    setShowSortDropdown(!showSortDropdown);
   };
 
-  const DropDownButton = () => {
-    return (
-      <DropdownButton id="dropdown-button" title="Dropdown button">
-        <Dropdown.Item onClick={() => setCurrentState('SUB')}>Submitted</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('REJ')}>Rejected</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('WIT')}>Author has withdrawn</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('AUR')}>Awaiting author review</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('ARN')}>Author rivising</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('CED')}>The copy editing</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('ERV')}>Awaiting editor review</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('FOR')}>Undergoing formatting</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('PUB')}>Published</Dropdown.Item>
-        <Dropdown.Item onClick={() => setCurrentState('REV')}>Referee reviewing</Dropdown.Item>
-      </DropdownButton>
-    );
-  }
+  const selectState = (state) => {
+    setCurrentState(state);
+    setShowSortDropdown(false);
+  };
 
   useEffect(fetchManuscripts, []);
 
+  const stateOptions = [
+    { code: '', label: 'All States' },
+    { code: 'SUB', label: 'Submitted' },
+    { code: 'REJ', label: 'Rejected' },
+    { code: 'WIT', label: 'Author has withdrawn' },
+    { code: 'AUR', label: 'Awaiting author review' },
+    { code: 'ARN', label: 'Author revising' },
+    { code: 'CED', label: 'Copy editing' },
+    { code: 'ERV', label: 'Awaiting editor review' },
+    { code: 'FOR', label: 'Undergoing formatting' },
+    { code: 'PUB', label: 'Published' },
+    { code: 'REV', label: 'Referee reviewing' }
+  ];
+
   return (
     <div className="dashboard-wrapper">
-      <header>
-        <h1>View All Manuscripts</h1>
-        <div className="buttons">
-          <button onClick={toggleSortOrder}>
-            {sortOrder === 'subFirst' ? 'Sort Alphabetically' : 'Show Submissions First'}
-          </button>
-          <DropDownButton />
+      <header className="dashboard-header">
+        <div className="header-row">
+          <h1>Manuscript Dashboard</h1>
+          <div className="dropdown-container">
+            <button 
+              className="dropdown-button"
+              onClick={toggleSortDropdown}
+            >
+              Sort By: {currentState ? stateOptions.find(option => option.code === currentState)?.label : 'All States'}
+            </button>
+            
+            {showSortDropdown && (
+              <div className="dropdown-menu">
+                <ul className="filter-list">
+                  {stateOptions.map((option) => (
+                    <li 
+                      key={option.code} 
+                      onClick={() => selectState(option.code)}
+                      className={currentState === option.code ? 'selected' : ''}
+                    >
+                      {option.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -232,4 +247,3 @@ function Manuscripts() {
 }
 
 export default Manuscripts;
-
