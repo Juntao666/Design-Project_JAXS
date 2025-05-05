@@ -2,14 +2,14 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event'
 
-import Home from './Home';
+import Dashboard from './Dashboard';
 
-describe('Home', () => {
-    it('shows Home', async () => {
-        render(<Home />);
+describe('Dashboard', () => {
+    it('shows Dashboard', async () => {
+        render(<Dashboard />);
 
         expect(screen.getByRole('heading'))
-         .toHaveTextContent('JAXS')
+         .toHaveTextContent('Manuscript Dashboard')
 
     });
 });
