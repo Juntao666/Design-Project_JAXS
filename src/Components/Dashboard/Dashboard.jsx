@@ -137,7 +137,7 @@ function manuscriptObjectToArray(data) {
 function Manuscripts() {
   const [error, setError] = useState('');
   const [manuscripts, setManuscripts] = useState([]);
-  const [sortOrder, setSortOrder] = useState('subFirst');
+  const [sortOrder] = useState('subFirst');
   const [currentState, setCurrentState] = useState('');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
