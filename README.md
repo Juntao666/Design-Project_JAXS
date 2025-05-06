@@ -8,9 +8,17 @@
 
 `cd demo-frontend`  
 `npm install`  
-`npm start`  
+`npm start`
 
 This should start the development server. Make changes and save to hot-reload the page.
+
+# Deploying to Heroku
+
+`git push heroku main`
+`heroku open --app thawing-sea-65385`
+
+might need to try this if the Heroku app is not connected to git repo
+`heroku git:remote -a thawing-sea-65385`
 
 # Possible Errors
 
