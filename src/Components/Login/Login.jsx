@@ -133,7 +133,7 @@ const fetchUserRolesByEmail = async (email) => {
     const [editing, setEditing] = useState(false);
     const [successMsg, setSuccessMsg] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
-
+    
     const email = localStorage.getItem('email');
     const username = localStorage.getItem('username');
 
@@ -153,6 +153,26 @@ const fetchUserRolesByEmail = async (email) => {
       fetchProfile();
     }, [email, username]);
 
+    const deleteSelf = async () => {
+      const userId = localStorage.getItem('username');
+      const encodedEmail = encodeURIComponent(email);
+      try {
+        await axios.delete(`${PEOPLE_ENDPOINT}/${encodedEmail}/${userId}`);
+        localStorage.removeItem('username');
+        localStorage.removeItem('email');
+        localStorage.removeItem('userRoles');
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setError('');
+        onLogout();
+        navigate('/');
+      } catch (err) {
+        setErrorMsg('删除账户失败：' + err.message);
+      }
+    };
+  
     const handleUpdate = async () => {
       try {
         await axios.post(`${PEOPLE_ENDPOINT}/update`, {
@@ -217,6 +237,7 @@ const fetchUserRolesByEmail = async (email) => {
         <button onClick={() => setEditing(true)}>Edit Profile</button>
       )}
       <button onClick={handleLogout}>Logout</button>
+      <button onClick={deleteSelf}>Delete My Account</button>
     </div>
   );
 }
