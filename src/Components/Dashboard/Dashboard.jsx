@@ -21,9 +21,14 @@ function Manuscript({ manuscript, refresh, setError}) {
 
   const [validActions, setValidActions] = useState([]);
   const [referee, setReferee] = useState('');
+  const [localRefs, setLocalRefs] = useState(manuscript.referees || []);
   const [targetState, setTargetState] = useState('');
   const [showAbstract, setShowAbstract] = useState(false);
   const [showText, setShowText] = useState(false);
+
+  useEffect(() => {
+    setLocalRefs(manuscript.referees || []);
+  }, [manuscript.referees]);
 
   useEffect(() => {
     axios.get(`${VALID_ACTIONS_ENDPOINT}/${manuscript.state}`)
@@ -53,6 +58,31 @@ function Manuscript({ manuscript, refresh, setError}) {
       });
   };
 
+    const assignReferee = () => {
+    if (!referee) {
+      setError('Please enter a referee email before assigning.');
+      return;
+    }
+
+    axios.post(`${BACKEND_URL}/manu/assign_referee`, {
+      key: manuscript.key,
+      referee: referee
+    })
+    .then(() => {
+      setError('');
+      setLocalRefs([...localRefs, referee]);
+      setReferee('');   // clear input
+      refresh();
+    })
+    .catch(err => {
+      if (err.response?.status === 404) {
+        setError('Invalid email – please check and try again.');
+      } else {
+        setError('Could not assign referee right now. Please try again later.');
+      }
+    });
+  };
+
   const getActionName = (action) => {
     return actionMapping[action] || action;
   }
@@ -66,8 +96,8 @@ function Manuscript({ manuscript, refresh, setError}) {
 
         <div className="manuscript-referees">
           <strong>Referees:</strong>{' '}
-          {Array.isArray(manuscript.referees) && manuscript.referees.length > 0
-            ? manuscript.referees.join(', ')
+          {localRefs.length > 0
+            ? localRefs.join(', ')
             : 'No referee'}
         </div>
 
@@ -104,7 +134,16 @@ function Manuscript({ manuscript, refresh, setError}) {
 
         <div className="actions">
           {validActions.map((action) => (
-            <button key={action} onClick={() => performAction(action)}>
+            <button
+              key={action}
+              onClick={() => {
+                if (action === 'ARF') {
+                  assignReferee();
+                } else {
+                  performAction(action);
+                }
+              }}
+            >
               {getActionName(action)}
             </button>
           ))}
