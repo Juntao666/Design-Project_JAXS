@@ -133,7 +133,7 @@ const fetchUserRolesByEmail = async (email) => {
     const [editing, setEditing] = useState(false);
     const [successMsg, setSuccessMsg] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
-    
+
     const email = localStorage.getItem('email');
     const username = localStorage.getItem('username');
 
@@ -154,10 +154,10 @@ const fetchUserRolesByEmail = async (email) => {
     }, [email, username]);
 
     const deleteSelf = async () => {
-      const userId = localStorage.getItem('username');
-      const encodedEmail = encodeURIComponent(email);
+      // const userId = localStorage.getItem('username');
+      //const encodedEmail = encodeURIComponent(email);
       try {
-        await axios.delete(`${PEOPLE_ENDPOINT}/${encodedEmail}/${userId}`);
+        await axios.delete(`${PEOPLE_ENDPOINT}/${email}/`);
         localStorage.removeItem('username');
         localStorage.removeItem('email');
         localStorage.removeItem('userRoles');
@@ -169,7 +169,7 @@ const fetchUserRolesByEmail = async (email) => {
         onLogout();
         navigate('/');
       } catch (err) {
-        setErrorMsg('删除账户失败：' + err.message);
+        setErrorMsg('Failed to delete ' + err.message);
       }
     };
   
