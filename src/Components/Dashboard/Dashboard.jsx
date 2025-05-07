@@ -42,16 +42,37 @@ function Manuscript({ manuscript, refresh, setError}) {
   }, [manuscript.state]);
 
   const performAction = (action) => {
+    const userEmail = localStorage.getItem('email');
+    const isSRV = action === 'SRV';
     const payload = {
       _id: manuscript.key,
       action,
       referee,
       target_state: targetState,
     };
+
     axios.put(UPDATE_ACTION_ENDPOINT, payload)
       .then(() => {
-        setError('');
-        refresh(); // Refresh manuscripts after action
+        // Code to remove the referee so if the referee submits a review, the
+        // manuscript is removed from their dashboard
+        if (isSRV) {
+
+          axios.post(`${BACKEND_URL}/manu/remove_referee`, {
+            key: manuscript.key,
+            referee: userEmail
+          })
+          .then(() => {
+            setError('');
+            setLocalRefs(localRefs.filter(r => r !== userEmail));
+            refresh();
+          })
+          .catch((err) => {
+            setError(`Review submitted but failed to remove referee: ${err}`);
+          });
+        } else {
+          setError('');
+          refresh();
+        }
       })
       .catch((error) => {
         setError(`Failed to perform action: ${error}`);
@@ -87,6 +108,28 @@ function Manuscript({ manuscript, refresh, setError}) {
     return actionMapping[action] || action;
   }
 
+  const getAllowedActionsForUser = () => {
+    const userEmail = localStorage.getItem('email');
+    const userRoles = JSON.parse(localStorage.getItem('userRoles') || '[]');
+    const isEditor = userRoles.includes('ED');
+    const isAuthor = manuscript.author_email === userEmail;
+    const isReferee = Array.isArray(manuscript.referees) && manuscript.referees.includes(userEmail);
+
+    return validActions.filter(action => {
+      if (isEditor) return true;
+
+      if (isAuthor) {
+        return ['WIT', 'AUR'].includes(action);
+      }
+
+      if (isReferee) {
+        return manuscript.state === 'REV' && action === 'SRV';
+      }
+
+      return false;
+    });
+  };
+
   return (
     <div>
       <div className="manuscript-container">
@@ -121,7 +164,7 @@ function Manuscript({ manuscript, refresh, setError}) {
 
         <input
         type="text"
-        placeholder="Referee"
+        placeholder="Referee (Email)"
         value={referee}
         onChange={(e) => setReferee(e.target.value)}
         />
@@ -133,7 +176,7 @@ function Manuscript({ manuscript, refresh, setError}) {
         />
 
         <div className="actions">
-          {validActions.map((action) => (
+          {getAllowedActionsForUser().map((action) => (
             <button
               key={action}
               onClick={() => {
@@ -158,6 +201,7 @@ Manuscript.propTypes = {
     key: propTypes.string.isRequired,
     title: propTypes.string.isRequired,
     author: propTypes.string.isRequired,
+    author_email: propTypes.string.isRequired,
     state: propTypes.string.isRequired,
     abstract: propTypes.string.isRequired,
     text: propTypes.string.isRequired,
@@ -190,7 +234,10 @@ function Manuscripts() {
         let arr = manuscriptObjectToArray(data);
 
         if (!isEditor && userEmail) {
-          arr = arr.filter(m => m.author_email === userEmail);
+          arr = arr.filter(m =>
+            m.author_email === userEmail ||
+            (Array.isArray(m.referees) && m.referees.includes(userEmail))
+          );
         }
 
         sortManuscripts(arr, sortOrder);
@@ -199,17 +246,18 @@ function Manuscripts() {
       .catch((error) => setError(`There was a problem retrieving manuscripts. ${error}`));
   };
 
-  const sortManuscripts = (manuscripts, order) => {
-    if (order === 'subFirst') {
-      // Put SUB states first, then sort alphabetically
-      manuscripts.sort((a, b) => {
-        if (a.state === 'SUB' && b.state !== 'SUB') return -1;
-        if (a.state !== 'SUB' && b.state === 'SUB') return 1;
-        return a.state.localeCompare(b.state);
-      });
-    } else if (order === 'alphabetical') {
-      manuscripts.sort((a, b) => a.state.localeCompare(b.state));
-    }
+  const sortManuscripts = (manuscripts) => {
+    const customStateOrder = ['SUB', 'REV', 'ARN', 'ERV', 'CED', 'AUR', 'FOR', 'PUB', 'REJ', 'WIT'];
+
+    manuscripts.sort((a, b) => {
+      const indexA = customStateOrder.indexOf(a.state);
+      const indexB = customStateOrder.indexOf(b.state);
+
+      const safeIndexA = indexA === -1 ? customStateOrder.length : indexA;
+      const safeIndexB = indexB === -1 ? customStateOrder.length : indexB;
+
+      return safeIndexA - safeIndexB;
+    });
   };
 
   const toggleSortDropdown = () => {
