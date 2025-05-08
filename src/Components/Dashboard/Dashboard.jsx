@@ -162,18 +162,22 @@ function Manuscript({ manuscript, refresh, setError}) {
           }   
         </div>
 
-        <input
-        type="text"
-        placeholder="Referee (Email)"
-        value={referee}
-        onChange={(e) => setReferee(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Target State (EDM Only)"
-          value={targetState}
-          onChange={(e) => setTargetState(e.target.value)}
-        />
+        {JSON.parse(localStorage.getItem('userRoles') || '[]').includes('ED') && (
+          <>
+            <input
+              type="text"
+              placeholder="Referee (Email)"
+              value={referee}
+              onChange={(e) => setReferee(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Target State (EDM Only)"
+              value={targetState}
+              onChange={(e) => setTargetState(e.target.value)}
+            />
+          </>
+        )}
 
         <div className="actions">
           {getAllowedActionsForUser().map((action) => (
