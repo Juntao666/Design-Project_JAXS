@@ -96,17 +96,23 @@ function UpdatePersonForm({
   cancel,
   fetchPeople,
   setError,
+  roleOptions,
 }) {
   const [name, setName] = useState(person.name);
+  const [selectedRoles, setSelectedRoles] = useState(person.roles);
 
-  const changeName = (event) => { setName(event.target.value); };
+  const changeName = (event) => setName(event.target.value);
+  const changeRoles = (event) => {
+    const values = Array.from(event.target.selectedOptions, o => o.value);
+    setSelectedRoles(values);
+  };
 
   const updatePerson = (event) => {
     event.preventDefault();
     const updatedPerson = {
       name: name,
       email: person.email,
-      roles: person.roles,
+      roles: selectedRoles,
       affiliation: person.affiliation,
     };
     axios.post(PEOPLE_UPDATE_ENDPOINT, updatedPerson)
@@ -119,28 +125,47 @@ function UpdatePersonForm({
 
   if (!visible) return null;
   return (
-    <form>
-      <label htmlFor="name">
-        Name
-      </label>
+    <form onSubmit={updatePerson}>
+      <label htmlFor="name">Name</label>
       <input required type="text" id="name" value={name} onChange={changeName} />
-      <button type="button" onClick={cancel}>Cancel</button>
-      <button type="submit" onClick={updatePerson}>Update</button>
+
+      <label htmlFor="roles">Roles</label><br/>
+      <select
+        multiple
+        required
+        id="roles"
+        value={selectedRoles}
+        onChange={changeRoles}
+      >
+        {Object.entries(roleOptions).map(([code, label]) => (
+          <option key={code} value={code}>
+            {label}
+          </option>
+        ))}
+      </select>
+
+      <button type="button" onClick={cancel}>
+        Cancel
+      </button>
+      <button type="submit">Update</button>
     </form>
   );
 }
+
 UpdatePersonForm.propTypes = {
   person: propTypes.shape({
     name: propTypes.string.isRequired,
     email: propTypes.string.isRequired,
-    roles: propTypes.string.isRequired,
+    roles: propTypes.arrayOf(propTypes.string).isRequired,
     affiliation: propTypes.string.isRequired,
   }).isRequired,
   visible: propTypes.bool.isRequired,
   cancel: propTypes.func.isRequired,
   fetchPeople: propTypes.func.isRequired,
   setError: propTypes.func.isRequired,
+  roleOptions: propTypes.object.isRequired,
 };
+
 
 function ErrorMessage({ message }) {
   return (
@@ -195,6 +220,7 @@ function Person({ person, fetchPeople, setError, roleMap, }) {
         cancel={hideUpdatePersonForm}
         fetchPeople={fetchPeople}
         setError={setError}
+        roleOptions={roleMap}
       />
     </div>
   );
